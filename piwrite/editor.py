@@ -47,7 +47,7 @@ class Editor:
         self.completions = None
         self.completions_markdownified = None
         self.font = "serif"
-        self.fontsize = 20
+        self.fontsize = 50
         self.err = None
         home = Path.home()
         self.docs = home / "piwrite-docs/"
@@ -105,7 +105,7 @@ class Editor:
             lines[self.cursor.line] = (
                 start + """<span id="normal">""" + letter + """</span>""" + end
             )
-        viz = int(700 / (2 * self.fontsize)) + 2  # _very_ rough approx
+        viz = int(1100 / (2 * self.fontsize)) + 2  # _very_ rough approx
         row = self.cursor.line
         if row < viz:
             return markdownify(lines[0:viz], row)
@@ -412,11 +412,13 @@ class Editor:
             self.clear_command()
             return
         if "".join(command[0:9]) == ":fontsize" and command[-1] == Keys.ControlM:
-            self.fontsize = "".join(command[10:-1]).strip()
+            self.fontsize = int("".join(command[10:-1]).strip())
+            self.status = f"Set font size to {self.fontsize}"
             self.clear_command()
             return
         if "".join(command[0:3]) == ":fs" and command[-1] == Keys.ControlM:
-            self.fontsize = "".join(command[4:-1]).strip()
+            self.fontsize = int("".join(command[4:-1]).strip())
+            self.status = f"Set font size to {self.fontsize}"
             self.clear_command()
             return
         if (command[0:2] == [":", "e"] or command[0:3] == [":", "e", "!"]) and command[
@@ -480,6 +482,7 @@ class Editor:
             else:
                 filename = self.completions["files"][self.completions["idx"]]
             try:
+                logger.debug(f"Opening {filename}")
                 text = Path(filename).read_text()
                 lines = text.split("\n")
                 self.buffer = Buffer([Line(line) for line in lines])
