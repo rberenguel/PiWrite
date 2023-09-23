@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "piwrite"
+version = "0.1.0"
+description = "TBD"
+authors = ["Ruben Berenguel Montoro <ruben@mostlymaths.net>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+prompt-toolkit = "^3.0.39"
+aiohttp = "^3.8.5"
+python-socketio = "^5.9.0"
+colorlog = "^6.7.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+mypy = "^1.5.1"
+black = "^23.9.1"
+isort = "^5.12.0"
+
+[tool.poetry.scripts]
+piwrite = 'piwrite.server:start'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+ignore_missing_imports = true

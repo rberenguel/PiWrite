@@ -1,0 +1,20 @@
+<head>
+<link rel='stylesheet' href='/static/index.css'>
+<title>PiWrite</title>
+<script src="/static/30socketio.js"></script>
+<script src="/static/index.js"></script>
+</head>
+<body onload="piwrite()">
+<div id="container">
+<div id="filename">(filename)</div>
+<div id="saved"></div>
+<div id="mode">?</div>
+</div>
+<div style="clear: both;"></div>
+<div id="fieldcontainer" style="fontsize: 20px;">
+<pre id="field" class="serif">Press any key to trigger server update</pre>
+</div>
+<hr/>
+<div id="completions"></div>
+<div id="status"></div>
+</body>

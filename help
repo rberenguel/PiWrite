@@ -1,0 +1,56 @@
+# PiWrite help
+(press `q` to go back to your previous file)
+---
+### Welcome to PiWrite!
+
+**PiWrite** is a modal text editor inspired by Vim. If you want to know more details, please check the repository at `github.com/rberenguel/piwrite`
+
+It partially supports a reduced subset of Markdown, so you can:
+
+- Bold by surrounding with **
+- Italics by surrounding with _
+- Code block by surrounding with `
+- Use up to 4 # for headings
+- Start a line with - to get an unordered list
+- _Ordered lists are not supported_ 
+
+---
+
+### Changing modes
+
+`i`: enter insert mode from normal mode just before the current cursor position
+`I`: enter insert mode from normal mode _at the beginning of the current line_
+`a`: enter insert mode from normal mode just _after_ the current cursor position
+`A`: enter insert mode from normal mode _at the end of the current line_
+`o`: add a line below the cursor and enter insert mode on it
+
+`ESC`: enter normal mode from insert mode
+
+### Commands that work regardless of the mode
+
+`Ctrl-a`: move the cursor to the beginning of the line
+`Ctrl-e`: move the cursor to the end of the line
+`Arrows`: move the cursor around
+
+### Commands in Normal mode
+
+`:h<enter>`: this help
+`:e filename<enter>`: open file (in the `piwrite-docs` folder only). Won't work if you have unsaved changes
+`:e! filename<enter>`: open file (in the `piwrite-docs` folder only). Will work regardless of your save state
+`:w filename<enter>`: write file (in the `piwrite-docs` folder only)
+
+`u`: Undo. The default (and so far only) undo depth is 10
+`Ctrl-r`: Redo. Same depth as above
+
+`:q<enter>`: Quit, will try to shutdown. Won't work if you have unsaved changes
+`:q!<enter>`: Quit, will try to shutdown. Will work regardless of your save state
+
+`dd`: delete the whole line
+
+`daw`: delete _around_ word (will slightly alter spaces)
+`diw`: delete _inside_ word (preserves spaces)
+`caw`: change _around_ word (like daw but switches to insert mode)
+`ciw`: change _around_ word (like diw but switches to insert mode)
+
+`p`: paste the last deleted/copied text at the cursor position
+`P`: paste the last deleted/copied text before the cursor position
