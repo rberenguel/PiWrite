@@ -26,7 +26,7 @@ function piwrite(){
     if(!e.data || e.data == ""){
       return
     }
-    console.log(`Setting font size to "+e.data`) // Kindle's browser does not accept ` strings
+    console.log("Setting font size to "+e.data) // Kindle's browser does not accept ` strings
     document.getElementById("fieldcontainer").style.fontSize = e.data + "px"
     })
 
