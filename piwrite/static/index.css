@@ -79,8 +79,8 @@ h4 {
   height: 1em;
 }
 #field {
-  min-height: 700px;
-  max-height: 700px;
+  min-height: 1100px;
+  max-height: 1100px;
 }
 
 #filename {
