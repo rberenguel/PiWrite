@@ -2,7 +2,12 @@ import asyncio
 import importlib
 import logging
 import os
-from pathlib import Path
+
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # I shouldn't have to do this
+    import importlib_resources as pkg_resources
 
 import aiohttp.web
 import socketio
@@ -18,7 +23,7 @@ HOST = os.getenv("PIWRITE_HOST", "127.0.0.1")
 DEBUG = os.getenv("PIWRITE_DEBUG", "False") == "True"
 PORT = int(os.getenv("PIWRITE_PORT", 80))
 
-STATIC_FOLDER = (importlib.resources.files('piwrite') / 'static')
+STATIC_FOLDER = (pkg_resources.files('piwrite') / 'static')
 
 def configure_logger():
     """Fancy logging is nicer"""
