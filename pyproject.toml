@@ -5,6 +5,8 @@ description = "TBD"
 authors = ["Ruben Berenguel Montoro <ruben@mostlymaths.net>"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/rberenguel/PiWrite"
+include = ["static"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
