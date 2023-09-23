@@ -1,4 +1,5 @@
 import asyncio
+import importlib
 import logging
 import os
 from pathlib import Path
@@ -17,9 +18,7 @@ HOST = os.getenv("PIWRITE_HOST", "127.0.0.1")
 DEBUG = os.getenv("PIWRITE_DEBUG", "False") == "True"
 PORT = int(os.getenv("PIWRITE_PORT", 80))
 
-SOCKETIO = "30socketio.js"
-
-PACKAGE_ROOT = Path(__file__).resolve().parent.parent
+STATIC_FOLDER = (importlib.resources.files('piwrite') / 'static')
 
 def configure_logger():
     """Fancy logging is nicer"""
@@ -116,8 +115,8 @@ async def the_loop():
 
 async def main():
     app = aiohttp.web.Application()
-    app.router.add_route("GET", "/", staticHandle("static/index.html"))
-    app.add_routes([aiohttp.web.static("/static", PACKAGE_ROOT / "static", show_index=False)])
+    app.router.add_route("GET", "/", staticHandle(STATIC_FOLDER / "index.html"))
+    app.add_routes([aiohttp.web.static("/static", STATIC_FOLDER, show_index=False)])
     app.add_routes([aiohttp.web.static("/docs", v.docs, show_index=True)])
     sio.attach(app)
     runner = aiohttp.web.AppRunner(app)
