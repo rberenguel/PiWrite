@@ -19,15 +19,15 @@ function piwrite(){
   
   socket.on('completions', function (e) {
     console.log('completions', e)
-     document.getElementById("completions").innerHTML = e.data
+    document.getElementById("completions").innerHTML = e.data
   });
   socket.on('fontsize', function (e) {
     console.log('fontsize', e)
     if(!e.data || e.data == ""){
       return
     }
-    console.log(`Setting font size to ${e.data}`)
-    document.getElementById("fieldcontainer").style.fontSize = `${e.data}px`
+    console.log(`Setting font size to "+e.data`) // Kindle's browser does not accept ` strings
+    document.getElementById("fieldcontainer").style.fontSize = e.data + "px"
     })
 
   socket.on('font', function (e) {
