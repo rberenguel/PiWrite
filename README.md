@@ -66,6 +66,8 @@ Point your web browser to this address and try! The editor is vim inspired, and 
 
 If you need a Pi, I can't recommend [Pimoroni](https://shop.pimoroni.com) enough. I'm not affiliated, I just buy always from them.
 
+The instructions below may be missing some piece, I have written it based on my bash history and what I remember having to tweak. With the information of _what_ you need to do, there are plenty of tutorials on how to approach each step though.
+
 ## Basics
 
 Best is installing a lightweight Raspbian version, since the Zero is not a terribly fast machine. By "mistake" (I was trying something) I updated the lite version (on Buster, I think) to Bookworm. Don't do that, not needed.
