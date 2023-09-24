@@ -24,7 +24,7 @@ It partially supports a reduced subset of Markdown, so you can:
 `A`: enter insert mode from normal mode _at the end of the current line_
 `o`: add a line below the cursor and enter insert mode on it
 
-`ESC`: enter normal mode from insert mode
+`ESC`: enter normal mode from insert mode. For some reason (probably related to `prompt-toolkit` you need to press it twice. I'm looking into it.
 
 ### Commands that work regardless of the mode
 

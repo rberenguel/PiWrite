@@ -83,8 +83,6 @@ function piwrite(){
     }
   });
 
-  socket.send(JSON.stringify({"data": 'CONNECT'}));
-
   socket.on('filename', function(e) {
     console.log(e)
     document.getElementById("filename").innerHTML = e.data
