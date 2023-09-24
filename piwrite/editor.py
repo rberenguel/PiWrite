@@ -21,11 +21,6 @@ class Mode(Enum):
     NORMAL = "N"
     INSERT = "I"
 
-
-INSERTION_CARET = """<span id="insertion">|</span>"""
-NORMAL_CARET = """<span id="normal">█</span>"""
-
-
 class Editor:
     UNDO_DEPTH = 10
 
