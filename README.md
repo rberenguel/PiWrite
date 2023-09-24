@@ -1,5 +1,11 @@
 # PiWrite
 
+
+
+https://github.com/rberenguel/PiWrite/assets/2410938/7902e0e9-7fd3-4d74-926b-1ac7ad85b84e
+
+
+
 #### What?
 
 Have you ever wanted to use your Kindle Paperwhite to write, even more, with a vim-like editor? This is what PiWrite is for.
@@ -10,11 +16,11 @@ The TL;DR is _a webserver running somewhere a keyboard can be plugged, and a pag
 
 The not-so-short version requires more effort and details, but is the UX I wanted to get:
 
-- A Raspberry Pi Zero W…
-- Paired with a Bluetooth keyboard…
-- Set up in access point mode…
-- With this package installed…
-- And configured to start automatically on boot.
+- A **Raspberry Pi Zero W**…
+- Paired with a **Bluetooth keyboard**…
+- Set up in **access point mode**…
+- With **this package** installed…
+- And configured to **start automatically** on boot.
 
 #### Why?
 
