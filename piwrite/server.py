@@ -128,7 +128,7 @@ async def main():
     await runner.setup()
     site = aiohttp.web.TCPSite(runner, host=HOST, port=PORT)
     await site.start()
-    logger.info(f"Server started at '{PIWRITE_HOST}:{PIWRITE_PORT}'")
+    logger.info(f"Server started at '{HOST}:{PORT}'")
     await the_loop()
     await asyncio.Event().wait()
 
