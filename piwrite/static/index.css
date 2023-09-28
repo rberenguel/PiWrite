@@ -6,10 +6,24 @@
 }
 
 @font-face {
-  font-family: "monoidregular";
+  font-family: "IM Fell English";
+  font-style: bold;
+  font-weight: 700;
+  src: url("/static/ImFELL-B.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "monoid";
   src: url("/static/monoid-regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
+}
+
+@font-face {
+  font-family: "monoid";
+  src: url("/static/monoid-bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: bold;
 }
 
 @font-face {
@@ -18,6 +32,21 @@
   font-weight: 400;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "Cooper Hewitt";
+  src: url("/static/cooper-book-i.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Cooper Hewitt";
+  src: url("/static/cooper-heavy.otf") format("opentype");
+  font-weight: 900;
+  font-style: bold;
+}
+
 
 body {
   font-size: 12pt;
