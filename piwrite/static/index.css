@@ -113,17 +113,17 @@ h4 {
 }
 
 #filename {
-  font-family: "monoidregular";
+  font-family: "monoid";
   font-size: 8pt;
   float: left;
 }
 #saved {
-  font-family: "monoidregular";
+  font-family: "monoid";
   font-size: 8pt;
   float: left;
 }
 #mode {
-  font-family: "monoidregular";
+  font-family: "monoid";
   font-size: 8pt;
   float: right;
 }
