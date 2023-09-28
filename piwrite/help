@@ -10,6 +10,7 @@ It partially supports a reduced subset of Markdown, so you can:
 - Bold by surrounding with **
 - Italics by surrounding with _
 - Code block by surrounding with `
+- Highlight a block by surrounding with :: (this is not markdown but was convenient)
 - Use up to 4 # for headings
 - Start a line with - to get an unordered list
 - _Ordered lists are not supported_ 
@@ -41,6 +42,10 @@ It partially supports a reduced subset of Markdown, so you can:
 
 `u`: Undo. The default (and so far only) undo depth is 10
 `Ctrl-r`: Redo. Same depth as above
+
+`:mono`: Switch to a monospace font (Monoid)
+`:sans`: Switch to a sans-serif font (Cooper Hewitt book)
+`:serif`: Swithc to a serif font (default, IM Fell English)
 
 `:q<enter>`: Quit, will try to shutdown. Won't work if you have unsaved changes
 `:q!<enter>`: Quit, will try to shutdown. Will work regardless of your save state
