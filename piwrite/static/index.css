@@ -155,3 +155,9 @@ pre {
   word-wrap: break-word;
   overflow: hidden;
 }
+
+/* Seriously, I had to do this to get IM Fell to have a nicer bold */
+b {
+  font-weight: bold;
+  text-shadow: 1px 1px 1px black; 
+}
