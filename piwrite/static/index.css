@@ -9,7 +9,7 @@
   font-family: "IM Fell English";
   font-style: bold;
   font-weight: 700;
-  src: url("/static/ImFELL-B.ttf") format("truetype");
+  src: url("/static/ImFELL-SC.ttf") format("truetype");
 }
 
 @font-face {
@@ -50,13 +50,13 @@
 
 body {
   font-size: 12pt;
-  font-family: "monoidregular";
+  font-family: "monoid";
   font-weight: 100;
   margin: 2%;
 }
 
 .monospace {
-  font-family: "monoidregular";
+  font-family: "monoid";
   font-size: 83%;
 }
 
