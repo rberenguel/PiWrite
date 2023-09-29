@@ -1,9 +1,7 @@
 # PiWrite
 
 
-
 https://github.com/rberenguel/PiWrite/assets/2410938/7902e0e9-7fd3-4d74-926b-1ac7ad85b84e
-
 
 
 #### What?
@@ -189,11 +187,22 @@ You can test if it works (i.e.. if it is the right version or not) or not by sta
 You'll also want to start piwrite on `tty` user start, you can do this by adding the following to the end of your `.profile`
 
 ```
-export PIWRITE_HOST=pi.write # or pi, if it's not under the access point
+export PIWRITE_HOST=pi.write # or just pi, if it's not under the access point
 piwrite
 ```
 
 ---
+
+## Set up your Kindle
+
+It would look as if nothing is needed from the Kindle side, but actually connecting to an access point that provides _no internet_ is not something a Kindle enjoys. 
+
+You have to:
+- Connect your Kindle via USB to a computer, 
+- Create a file called `WIFI_NO_NET_PROBE` in the root folder of your Kindle,
+- Restart it.
+
+This skips connectivity check (it will also make connecting to any other WiFi way faster).
 
 ## Some oddities
 

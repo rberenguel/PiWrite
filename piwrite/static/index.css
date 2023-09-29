@@ -47,6 +47,26 @@
   font-style: bold;
 }
 
+@font-face {
+  font-family: "Computer Modern";
+  src: url("/static/cmunrm.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Computer Modern";
+  src: url("/static/cmunbx.ttf") format("truetype");
+  font-weight: 900;
+  font-style: bold;
+}
+
+@font-face {
+  font-family: "Computer Modern";
+  src: url("/static/cmunti.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
 
 body {
   font-size: 12pt;
@@ -58,6 +78,10 @@ body {
 .monospace {
   font-family: "monoid";
   font-size: 83%;
+}
+
+.latex {
+  font-family: "Computer Modern";
 }
 
 .serif {

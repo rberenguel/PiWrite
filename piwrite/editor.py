@@ -406,6 +406,10 @@ class Editor:
             self.font = "serif"
             self.clear_command()
             return
+        if "".join(command[0:6]) == ":latex" and command[-1] == Keys.ControlM:
+            self.font = "latex"
+            self.clear_command()
+            return
         if "".join(command[0:9]) == ":fontsize" and command[-1] == Keys.ControlM:
             self.fontsize = int("".join(command[10:-1]).strip())
             self.status = f"Set font size to {self.fontsize}"

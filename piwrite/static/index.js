@@ -40,18 +40,27 @@ function piwrite(){
       document.getElementById("field").classList.add("monospace")
       document.getElementById("field").classList.remove("serif")
       document.getElementById("field").classList.remove("sans")
+      document.getElementById("field").classList.remove("latex")
     }
     if(e.data == "serif"){
       document.getElementById("field").classList.add("serif")
       document.getElementById("field").classList.remove("monospace")
       document.getElementById("field").classList.remove("sans")
+      document.getElementById("field").classList.remove("latex")
     }
     if(e.data == "sans"){
       document.getElementById("field").classList.add("sans")
       document.getElementById("field").classList.remove("monospace")
       document.getElementById("field").classList.remove("serif")
+      document.getElementById("field").classList.remove("latex")
     }
-   });
+    if(e.data == "latex"){
+      document.getElementById("field").classList.add("latex")
+      document.getElementById("field").classList.remove("monospace")
+      document.getElementById("field").classList.remove("serif")
+      document.getElementById("field").classList.remove("sans")
+    }
+    });
 
 
   socket.on('status', function (e) {

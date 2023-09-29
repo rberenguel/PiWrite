@@ -45,7 +45,8 @@ It partially supports a reduced subset of Markdown, so you can:
 
 `:mono`: Switch to a monospace font (Monoid)
 `:sans`: Switch to a sans-serif font (Cooper Hewitt book)
-`:serif`: Swithc to a serif font (default, IM Fell English)
+`:serif`: Switch to a serif font (default, IM Fell English)
+`:latex`: Switch to Computer Modern (the typical LaTeX font)
 
 `:q<enter>`: Quit, will try to shutdown. Won't work if you have unsaved changes
 `:q!<enter>`: Quit, will try to shutdown. Will work regardless of your save state
