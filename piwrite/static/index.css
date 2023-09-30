@@ -70,10 +70,9 @@
 
 body {
   font-family: "monoid";
-  font-weight: 100;
   margin-right: 2%;
   margin-left: 2%;
-  margin-bottom: 2%;
+  margin-bottom: 0%;
   margin-top: 0%;
 }
 
@@ -130,32 +129,35 @@ h4 {
 }
 
 #container {
+  width: 100%;
   border-bottom: 1px solid black;
   margin-bottom: 0.3em;
-  height: 1.1em;
+  height: 1.9em;
   z-index: 10;
   background-color: white;
 }
 
 #bottom {
   position: fixed;
-  bottom: 0px;
+  bottom: 3em;
+  width: 100%;
   border-top: 1px solid black;
   margin-top: 0.3em;
-  height: 2.2em;
+  height: 3em;
+  min-height: 3em;
+  max-height: 3em;
   z-index: 10;
   background-color: white;
 }
 
 #fieldcontainer {
-  position: relative;
-  z-index: -1;
+  min-height: 1100px;
+  max-height: 1100px;
 }
 
 #field {
-/*  min-height: 1100px;
-  max-height: 1100px;
-  */
+  position: relative;
+  z-index: -1;
 }
 
 #filename {
@@ -169,14 +171,20 @@ h4 {
   float: left;
 }
 #mode {
+  width: 30%;
+  text-align: right;
   font-family: "monoid";
   font-size: 8pt;
   float: right;
 }
 #completions {
+  min-height: 1.5em;
+  max-height: 1.5em;
   font-size: 8pt;
 }
 #status {
+  min-height: 1.5em;
+  max-height: 1.5em;
   font-size: 8pt;
 }
 

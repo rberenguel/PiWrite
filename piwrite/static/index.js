@@ -23,7 +23,6 @@ function piwrite(){
     if(!e.data || e.data == ""){
       return
     }
-    console.log("Setting font size to "+e.data) // Kindle's browser does not accept ` strings
     document.getElementById("field").style.fontSize = e.data + "px"
     })
 
@@ -89,19 +88,16 @@ function piwrite(){
   })
 
   socket.on('buffer', function (e) {
-    const range = document.createRange()
   document.getElementById("field").innerHTML = e.data.join("")
-    try {
+      range = document.createRange()
       range.setStartBefore(document.getElementById("caret"))
       range.setEndAfter(document.getElementById("caret"))
-      const clientRect = range.getBoundingClientRect()
-      console.log(clientRect.top) 
-      const curr = document.getElementById("fieldcontainer").getBoundingClientRect().top 
-      let adjusted = curr-clientRect.top
+      clientRect = range.getBoundingClientRect()
+      curr = document.getElementById("field").getBoundingClientRect().top 
+      adjusted = curr-clientRect.top
       if(Math.abs(clientRect.top)>500){
         adjusted+=200
       }
-      document.getElementById("fieldcontainer").style.top = adjusted+"px"
-    } catch {}
+      document.getElementById("field").style.top = adjusted+"px"
    });
 }
