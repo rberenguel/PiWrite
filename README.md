@@ -72,7 +72,7 @@ Best is installing a lightweight Raspbian version, since the Zero is not a terri
 
 To configure everything you will need to set up the Raspberry for `ssh` access, and better with password. For using it as a "magical thing that lets the Kindle work as a text editor" is better if you disable requiring password for logging in via `tty`. You can enable this (known as autologin) by running `sudo raspi-config`, in the _System Options_ section. You specifically want _Console autologin_.
 
-You also better set up wifi connectivity too. You can set this up by adding a wpa_supplicant.conf file to the boot partition of the SD card with contents like the following:
+You also better set up wifi connectivity too. You can set this up by adding a `wpa_supplicant.conf` file to the boot partition of the SD card with contents like the following:
 
 ```
 network={
@@ -92,7 +92,7 @@ Steps needed after this:
 
 Pick your poison. The standard way is using `bluetoothctl`. I found that installing [Bluetuith](https://darkhz.github.io/bluetuith/Installation.html) was more convenient to be sure the pairing had worked. On the con side, you need to install the whole Go runtime. 
 
-Remember: the keyboard will be usable in the `tty` session, not in any ssh-initiated session.
+Remember: the keyboard will be usable in the `tty` session, NOT in any ssh-initiated session.
 
 If you want any fancy keyboard configuration (I use Colemak, and like my caps to be control) you will have to edit `/etc/default/keyboard` and add something like the following:
 
