@@ -1,6 +1,7 @@
 import logging
 import subprocess
 import sys
+import time
 import tempfile
 from dataclasses import dataclass
 from enum import Enum
@@ -340,6 +341,8 @@ class Editor:
         if command == [":", "q", Keys.ControlM]:
             self.clear_command()
             if self.saved:
+                self.status = "Shutting down"
+                time.sleep(1) # I want this real blocking here
                 subprocess.call(["shutdown", "-h", "now"])
             else:
                 self.status = "You have unsaved changes"
