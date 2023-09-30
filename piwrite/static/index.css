@@ -69,10 +69,12 @@
 }
 
 body {
-  font-size: 12pt;
   font-family: "monoid";
   font-weight: 100;
-  margin: 2%;
+  margin-right: 2%;
+  margin-left: 2%;
+  margin-bottom: 2%;
+  margin-top: 0%;
 }
 
 .monospace {
@@ -115,6 +117,7 @@ h4 {
 
 .focus {
   background-color: rgba(0, 0, 0, 0.1);
+  top: 50% !important;
 }
 
 .highlight {
@@ -129,11 +132,30 @@ h4 {
 #container {
   border-bottom: 1px solid black;
   margin-bottom: 0.3em;
-  height: 1em;
+  height: 1.1em;
+  z-index: 10;
+  background-color: white;
 }
+
+#bottom {
+  position: fixed;
+  bottom: 0px;
+  border-top: 1px solid black;
+  margin-top: 0.3em;
+  height: 2.2em;
+  z-index: 10;
+  background-color: white;
+}
+
+#fieldcontainer {
+  position: relative;
+  z-index: -1;
+}
+
 #field {
-  min-height: 1100px;
+/*  min-height: 1100px;
   max-height: 1100px;
+  */
 }
 
 #filename {
@@ -157,14 +179,19 @@ h4 {
 #status {
   font-size: 8pt;
 }
+
+#caret {}
+
 #insertion {
   margin-left: -0.1em;
   margin-right: 0em;
 }
-#normal {
+
+.normal {
   background-color: rgba(0, 0, 0, 0.3);
 }
-#ins {
+
+.ins {
   border-right: 2px solid black;
 }
 #ins0 {

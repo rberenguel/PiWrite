@@ -91,7 +91,7 @@ class Editor:
                 else:
                     start = lin[0 : col - 1]
                 lines[self.cursor.line] = (
-                    start + """<span id="ins">""" + letter + """</span>""" + end
+                    start + """<span id="caret" class="ins">""" + letter + """</span>""" + end
                 )
         if self._mode == Mode.NORMAL:
             if col - 1 < 0:
@@ -99,7 +99,7 @@ class Editor:
             else:
                 start = lin[0 : col - 1]
             lines[self.cursor.line] = (
-                start + """<span id="normal">""" + letter + """</span>""" + end
+                start + """<span id="caret" class="normal">""" + letter + """</span>""" + end
             )
         viz = int(1100 / (2 * self.fontsize)) + 2  # _very_ rough approx
         row = self.cursor.line
