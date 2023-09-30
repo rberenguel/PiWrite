@@ -191,6 +191,17 @@ export PIWRITE_HOST=pi.write # or just pi, if it's not under the access point
 piwrite
 ```
 
+## Reinstalling/updating the package
+
+To update, first disable access point mode (that is, remove the static IP settings on `dhcpcd.conf` and disable the `hostapd` and `dnsmasq` services), then run:
+
+```
+pipx uninstall piwrite
+pipx install piwrite@git+https://github.com/rberenguel/PiWrite
+```
+
+So far I haven't had luck _reinstalling_. Uninstall is fast though. If you are using your own fork, just use your own git location.
+
 ---
 
 ## Set up your Kindle
