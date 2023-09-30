@@ -56,6 +56,7 @@ function piwrite(){
     }
     });
 
+  rotated = false
 
   socket.on('status', function (e) {
     if(!e.data || e.data == ""){
@@ -63,6 +64,20 @@ function piwrite(){
     }
     document.getElementById("status").innerHTML = e.data
   });
+
+  socket.on('rot', function (e) {
+    if(!e.data || e.data == ""){
+      return
+    }
+    if(e.data == 0){
+      document.body.classList.remove("rot90")
+      rotated = false
+    }else{
+      document.body.classList.add("rot90")
+      rotated = true
+    }
+  });
+
 
   socket.on('command', function (e) {
     document.getElementById("status").innerHTML = e.data
@@ -90,10 +105,18 @@ function piwrite(){
       range.setStartBefore(document.getElementById("caret"))
       range.setEndAfter(document.getElementById("caret"))
       clientRect = range.getBoundingClientRect()
-      curr = document.getElementById("field").getBoundingClientRect().top 
-      adjusted = curr-clientRect.top
-      if(Math.abs(clientRect.top)>200){
-        adjusted+=200
+      if(rotated){
+        curr = document.getElementById("field").getBoundingClientRect().left
+        adjusted = curr-clientRect.left
+        if(Math.abs(clientRect.left)>200){
+          adjusted+=200
+        }
+      } else {
+        curr = document.getElementById("field").getBoundingClientRect().top 
+        adjusted = curr-clientRect.top
+        if(Math.abs(clientRect.top)>200){
+          adjusted+=200
+        }
       }
       document.getElementById("field").style.top = adjusted+"px"
    });

@@ -76,6 +76,13 @@ body {
   margin-top: 0%;
 }
 
+.rot90 {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+}
+
 .monospace {
   font-family: "monoid";
   font-size: 83%;
