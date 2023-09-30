@@ -36,7 +36,7 @@ class Editor:
         self._command = []
         self.yank = [""]
         self.setup_movement()
-        self.rot = 0
+        self.rot = "0"
         self.filename = "unnamed"
         self.previous_file = None
         self.saved = False
@@ -399,7 +399,10 @@ class Editor:
             self.clear_command()
             return
         if "".join(command[0:4]) == ":rot" and command[-1] == Keys.ControlM:
-            self.rot = 90
+            if self.rot == "0":
+                self.rot = "90"
+            else:
+                self.rot = "0"
             self.clear_command()
             return
         if "".join(command[0:5]) == ":mono" and command[-1] == Keys.ControlM:

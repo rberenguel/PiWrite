@@ -69,7 +69,7 @@ function piwrite(){
     if(!e.data || e.data == ""){
       return
     }
-    if(e.data == 0){
+    if(e.data == "0"){
       document.body.classList.remove("rot90")
       rotated = false
     }else{
@@ -106,9 +106,9 @@ function piwrite(){
       range.setEndAfter(document.getElementById("caret"))
       clientRect = range.getBoundingClientRect()
       if(rotated){
-        curr = document.getElementById("field").getBoundingClientRect().left
-        adjusted = curr-clientRect.left
-        if(Math.abs(clientRect.left)>200){
+        curr = document.getElementById("field").getBoundingClientRect().right
+        adjusted = -curr+clientRect.right
+        if(Math.abs(clientRect.right)>200){
           adjusted+=200
         }
       } else {
