@@ -92,7 +92,7 @@ function piwrite(){
       clientRect = range.getBoundingClientRect()
       curr = document.getElementById("field").getBoundingClientRect().top 
       adjusted = curr-clientRect.top
-      if(Math.abs(clientRect.top)>500){
+      if(Math.abs(clientRect.top)>200){
         adjusted+=200
       }
       document.getElementById("field").style.top = adjusted+"px"

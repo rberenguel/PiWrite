@@ -178,16 +178,18 @@ h4 {
   float: right;
 }
 #completions {
-  min-height: 12px;
-  max-height: 12px;
+  min-height: 1.5em;
+  max-height: 1.5em;
   font-size: 8pt;
   width: 900px;
+  display: block;
 }
 #status {
   min-height: 1.5em;
   max-height: 1.5em;
   font-size: 8pt;
   width: 900px;
+  display: block;
   /* By setting a fixed size it stops flickering on Kindle */
 }
 
