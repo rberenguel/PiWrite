@@ -181,11 +181,14 @@ h4 {
   min-height: 1.5em;
   max-height: 1.5em;
   font-size: 8pt;
+  width: 100%;
 }
 #status {
   min-height: 1.5em;
   max-height: 1.5em;
   font-size: 8pt;
+  width: 500px;
+  /* By setting a fixed size it stops flickering on Kindle */
 }
 
 #caret {}
