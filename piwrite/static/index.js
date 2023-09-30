@@ -31,7 +31,6 @@ function piwrite(){
       return
     }
     if(e.data == "mono"){
-      console.log("Setting font to mono")
       document.getElementById("field").classList.add("monospace")
       document.getElementById("field").classList.remove("serif")
       document.getElementById("field").classList.remove("sans")
@@ -65,11 +64,9 @@ function piwrite(){
     document.getElementById("status").innerHTML = e.data
   });
 
-
   socket.on('command', function (e) {
     document.getElementById("status").innerHTML = e.data
   });
-
 
   socket.on('mode', function (e) {
     document.getElementById("mode").innerHTML = e.data
@@ -77,7 +74,7 @@ function piwrite(){
  
   socket.on('saved', function (e) {
     if(e.data){
-      document.getElementById("saved").innerHTML = ""
+      document.getElementById("saved").innerHTML = "&nbsp;"
     } else {
       document.getElementById("saved").innerHTML = "*"
     }

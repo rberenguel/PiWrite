@@ -188,7 +188,7 @@ class Editor:
     def clear_command(self):
         self.completions = None
         self.completions_markdownified = None
-        self.status = ""
+        self.status = "&nbsp;"
         self._command = []
 
     def command(self):
