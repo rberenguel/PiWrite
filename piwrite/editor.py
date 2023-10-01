@@ -111,8 +111,8 @@ class Editor:
             return markdownify(lines, row)
         else:
             shift = int(viz / 2)
-            if self.rot == "90":
-                shift = 2
+            #if self.rot == "90": TODO: actually seems to work better like this
+            shift = 2
             return markdownify(lines[row - shift:], shift)
 
     def setup_movement(self):

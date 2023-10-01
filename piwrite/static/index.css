@@ -2,15 +2,23 @@
   font-family: "IM Fell English";
   font-style: normal;
   font-weight: 400;
-  src: url("/static/ImFELL.ttf") format("truetype");
+  src: url("/static/ImFell.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "IM Fell English";
   font-style: bold;
   font-weight: 700;
-  src: url("/static/ImFELL-SC.ttf") format("truetype");
+  src: url("/static/ImFell-SC.ttf") format("truetype");
 }
+
+@font-face {
+  font-family: "IM Fell English";
+  font-style: italic;
+  font-weight: 400;
+  src: url("/static/ImFell-i.ttf") format("truetype");
+}
+
 
 @font-face {
   font-family: "monoid";
