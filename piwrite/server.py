@@ -78,6 +78,7 @@ def init_fields():
         "font": {"sent": False, "old": None, "exec": lambda: v.font},
         "fontsize": {"sent": False, "old": None, "exec": lambda: v.fontsize},
         "rot": {"sent": False, "old": None, "exec": lambda: v.rot},
+        "dot": {"sent": False, "old": None, "exec": lambda: v.dot},
     }
 
 

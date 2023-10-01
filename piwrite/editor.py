@@ -37,6 +37,7 @@ class Editor:
         self.yank = [""]
         self.setup_movement()
         self.rot = "0"
+        self.dot = "nope"
         self.filename = "unnamed"
         self.previous_file = None
         self.saved = False
@@ -49,6 +50,7 @@ class Editor:
         home = Path.home()
         self.docs = home / "piwrite-docs/"
         self.docs.mkdir(exist_ok=True)
+        (self.docs / Path("imgs")).mkdir(exist_ok=True)
 
     def send(self, arr):
         """Send an array containing strings and keys to be parsed"""
@@ -373,6 +375,24 @@ class Editor:
             cmd = [":E ", str(help), Keys.ControlM]
             self.send(cmd)
             return
+
+        if command == [":", "d", "o", "t", Keys.ControlM]:
+            # Render graphviz
+            self.clear_command()
+            _, tmpname = tempfile.mkstemp()
+            resolved = str(Path(tmpname).resolve())
+            self.previous_file = (
+                resolved,
+                self.filename,
+            )  # Keep track of the previous "real" file (if any)
+            cmd = [":W ", resolved, Keys.ControlM]
+            self.send(cmd)
+            img_resolved = str((self.docs / Path("imgs") / Path("graph")).resolve()) + ".png"
+            subprocess.call(["dot", "-Tpng", resolved, "-o", img_resolved])
+            self.status = img_resolved
+            self.dot = "/docs/imgs/graph.png"
+            return
+
         if command[0:2] == [":", "w"] and command[-1] == Keys.ControlM:
             # Write file
             filename = "".join(command[3:-1])

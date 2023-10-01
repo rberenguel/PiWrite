@@ -26,6 +26,22 @@ function piwrite(){
     document.getElementById("field").style.fontSize = e.data + "px"
     })
 
+  socket.on('dot', function (e) {
+    console.log("Receiving dot:")
+    console.log(e)
+    if(!e.data || e.data == ""){
+      return
+    }
+    if(e.data == "nope"){
+	return
+    } else {
+        document.getElementById("field").style.display = "none"
+	document.getElementById("graph").src = e.data
+	document.getElementById("graph").style.display = "block"
+    }
+    })
+
+
   socket.on('font', function (e) {
     if(!e.data || e.data == ""){
       return
