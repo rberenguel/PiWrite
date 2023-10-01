@@ -43,6 +43,8 @@ It partially supports a reduced subset of Markdown, so you can:
 `u`: Undo. The default (and so far only) undo depth is 10
 `Ctrl-r`: Redo. Same depth as above
 
+`:rot`: Hacky, landscape mode. Cursor scrolling does not work that well in this case, sadly (due to browser issues I have to use the editor mode which is only half-functional)
+
 `:mono`: Switch to a monospace font (Monoid)
 `:sans`: Switch to a sans-serif font (Cooper Hewitt book)
 `:serif`: Switch to a serif font (default, IM Fell English)

@@ -71,9 +71,11 @@ function piwrite(){
     }
     if(e.data == "0"){
       document.body.classList.remove("rot90")
+      document.getElementById("bottom").classList.remove("rotbottom")
       rotated = false
     }else{
       document.body.classList.add("rot90")
+      document.getElementById("bottom").classList.add("rotbottom")
       rotated = true
     }
   });
@@ -106,11 +108,7 @@ function piwrite(){
       range.setEndAfter(document.getElementById("caret"))
       clientRect = range.getBoundingClientRect()
       if(rotated){
-        curr = document.getElementById("field").getBoundingClientRect().right
-        adjusted = -curr+clientRect.right
-        if(Math.abs(clientRect.right)>200){
-          adjusted+=200
-        }
+        return
       } else {
         curr = document.getElementById("field").getBoundingClientRect().top 
         adjusted = curr-clientRect.top
