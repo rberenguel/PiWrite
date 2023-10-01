@@ -104,14 +104,16 @@ class Editor:
             )
         viz = int(1100 / (2 * self.fontsize)) + 2  # _very_ rough approx
         if self.rot == "90": # TODO: Convert these to an Enum
-            viz = int(1100 / self.fontsize)
+            viz = int(int(self.fontsize)/9)
         # This is a hack
         row = self.cursor.line
         if row < viz:
-            return markdownify(lines[0:viz], row)
+            return markdownify(lines, row)
         else:
             shift = int(viz / 2)
-            return markdownify(lines[row - shift : row + shift], shift)
+            if self.rot == "90":
+                shift = 2
+            return markdownify(lines[row - shift:], shift)
 
     def setup_movement(self):
         def up():
