@@ -103,7 +103,7 @@ class Editor:
                 start + """<span id="caret" class="normal">""" + letter + """</span>""" + end
             )
         viz = int(1100 / (2 * self.fontsize)) + 2  # _very_ rough approx
-        if rot == "90": # TODO: Convert these to an Enum
+        if self.rot == "90": # TODO: Convert these to an Enum
             viz = int(1100 / self.fontsize)
         # This is a hack
         row = self.cursor.line
