@@ -33,11 +33,13 @@ function piwrite(){
       return
     }
     if(e.data == "nope"){
-	return
+      document.getElementById("field").style.display = "block"
+      document.getElementById("graph").style.display = "none"
+      document.getElementById("graph").src = ""
     } else {
-        document.getElementById("field").style.display = "none"
-	document.getElementById("graph").src = e.data
-	document.getElementById("graph").style.display = "block"
+      document.getElementById("field").style.display = "none"
+      document.getElementById("graph").src = e.data
+      document.getElementById("graph").style.display = "block"
     }
     })
 

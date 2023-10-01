@@ -335,6 +335,7 @@ class Editor:
             cmd = [":E ", self.previous_file[0], Keys.ControlM]
             self.clear_command()
             self.send(cmd)
+            self.dot = "nope"
             self.filename = self.previous_file[1]
             Path(self.previous_file[0]).unlink()
             self.previous_file = None
