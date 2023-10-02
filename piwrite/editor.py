@@ -511,6 +511,8 @@ class Editor:
                 self.err = str(e)
             self.cursor.to(0, 0)
             self.clear_command()
+            if self.filename.endswith(".dot"):
+                self.send([":mono", Keys.ControlM])
             return
         if command[0:2] == [":", "E"] and command[-1] == Keys.ControlM:
             if self.completions is None:
