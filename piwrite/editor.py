@@ -35,6 +35,7 @@ class Editor:
         self.cursor = Cursor(0, 0)
         self._command = []
         self.yank = [""]
+        self.viz = None
         self.setup_movement()
         self.rot = "0"
         self.dot = "nope"
@@ -104,17 +105,19 @@ class Editor:
             lines[self.cursor.line] = (
                 start + """<span id="caret" class="normal">""" + letter + """</span>""" + end
             )
-        viz = int(1100 / (2 * self.fontsize)) + 2  # _very_ rough approx
-        if self.rot == "90": # TODO: Convert these to an Enum
-            viz = int(int(self.fontsize)/9)
-        # This is a hack
+        if self.viz:
+            viz = self.viz[0]
+            shift = self.viz[1]
+        else:
+            viz = int(1100 / (2 * self.fontsize)) + 2  # _very_ rough approx
+            shift = int(viz / 2)
+            if self.rot == "90": # TODO: Convert these to an Enum
+                viz = int(int(self.fontsize)/9)
+                shift = 2
         row = self.cursor.line
         if row < viz:
             return markdownify(lines, row)
         else:
-            shift = int(viz / 2)
-            #if self.rot == "90": TODO: actually seems to work better like this
-            shift = 2
             return markdownify(lines[row - shift:], shift)
 
     def setup_movement(self):
@@ -481,6 +484,23 @@ class Editor:
                     else:
                         md.append(completion)
                 self.completions_markdownified = markdownify([" ".join(md)])
+            return
+        if command[0:4] == [":", "v", "i", "z"] and command[-1] == Keys.ControlM:
+            try:
+                viz_val = "".join(command[4:-1]).strip()
+                if len(viz_val) == 0:
+                    self.status = "Clearing custom viz"
+                    self.viz = None
+                else:
+                    viz, shift = viz_val.split(":")
+                    viz = int(viz)
+                    shift = int(shift)
+                    self.viz = (viz, shift)
+            except Exception as e:
+                self.status = f"viz has to be of the form int:int or empty ({e})"
+            finally:
+                self.clear_command()
+            self.status = f"Setting shift to {self.viz}"
             return
         if command[0:3] == [":", "e", "!"] and command[-1] == Keys.ControlM:
             self.status = ""

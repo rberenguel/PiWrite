@@ -114,6 +114,14 @@ def test_line_break():
     v.send(cmd)
     assert v.buffer.get() == ["1", "2"]
 
+def test_indent_ish():
+    v = editor.Editor()
+    cmd = ["i  b", ENT, "a"]
+    v.send(cmd)
+    s = v.buffer.get()[1] 
+    assert  v.buffer.get()[0]  == "  b"
+    assert s == "  a"
+
 
 def test_deletion():
     v = editor.Editor()

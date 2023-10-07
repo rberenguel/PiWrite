@@ -37,9 +37,16 @@ class Buffer:
             current_line: int = cursor.line
             head = self.lines[current_line][0 : cursor.column]
             tail = self.lines[current_line][cursor.column :]
+            # Keep indentation
+            prev = str(self.lines[current_line])
+            indent = len(prev) - len(prev.lstrip())
             self.lines[current_line] = Line(head)
-            self.lines.insert(cursor.line + 1, Line(tail))
-            cursor.to(current_line + 1, 0)
+            if len(tail) == 0 and indent > 0:
+                self.lines.insert(current_line + 1, Line(" "*indent))
+                cursor.to(current_line + 1, indent)
+            else:
+                self.lines.insert(current_line + 1, Line(tail))
+                cursor.to(current_line + 1, 0)
             return
 
         if cursor.line + 1 > len(self.lines):

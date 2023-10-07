@@ -108,8 +108,9 @@ async def the_loop():
                 v.dispatch(key_press)
                 await sio.emit("buffer", {"data": v.get()})
                 # Each key, send a new, different "info" message
-                field = list(update_only_fields.keys())[key_count]
-                update_only_fields[field]["sent"] = False
+                # Temporarily disabling to check
+                #field = list(update_only_fields.keys())[key_count]
+                #update_only_fields[field]["sent"] = False
                 for field, val in update_only_fields.items():
                     new_val = val["exec"]()
                     if new_val != val["old"] or not val["sent"]:
