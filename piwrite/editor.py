@@ -22,6 +22,7 @@ class Mode(Enum):
     NORMAL = "N"
     INSERT = "I"
 
+
 class Editor:
     UNDO_DEPTH = 10
 
@@ -95,7 +96,11 @@ class Editor:
                 else:
                     start = lin[0 : col - 1]
                 lines[self.cursor.line] = (
-                    start + """<span id="caret" class="ins">""" + letter + """</span>""" + end
+                    start
+                    + """<span id="caret" class="ins">"""
+                    + letter
+                    + """</span>"""
+                    + end
                 )
         if self._mode == Mode.NORMAL:
             if col - 1 < 0:
@@ -103,7 +108,11 @@ class Editor:
             else:
                 start = lin[0 : col - 1]
             lines[self.cursor.line] = (
-                start + """<span id="caret" class="normal">""" + letter + """</span>""" + end
+                start
+                + """<span id="caret" class="normal">"""
+                + letter
+                + """</span>"""
+                + end
             )
         if self.viz:
             viz = self.viz[0]
@@ -111,14 +120,14 @@ class Editor:
         else:
             viz = int(1100 / (2 * self.fontsize)) + 2  # _very_ rough approx
             shift = int(viz / 2)
-            if self.rot == "90": # TODO: Convert these to an Enum
-                viz = int(int(self.fontsize)/9)
+            if self.rot == "90":  # TODO: Convert these to an Enum
+                viz = int(int(self.fontsize) / 9)
                 shift = 2
         row = self.cursor.line
         if row < viz:
             return markdownify(lines, row)
         else:
-            return markdownify(lines[row - shift:], shift)
+            return markdownify(lines[row - shift :], shift)
 
     def setup_movement(self):
         def up():
@@ -354,7 +363,7 @@ class Editor:
             self.clear_command()
             if self.saved:
                 self.status = "Shutting down"
-                time.sleep(1) # I want this real blocking here
+                time.sleep(1)  # I want this real blocking here
                 subprocess.call(["shutdown", "-h", "now"])
             else:
                 self.status = "You have unsaved changes"
@@ -391,7 +400,9 @@ class Editor:
             )  # Keep track of the previous "real" file (if any)
             cmd = [":W ", resolved, Keys.ControlM]
             self.send(cmd)
-            img_resolved = str((self.docs / Path("imgs") / Path("graph")).resolve()) + ".png"
+            img_resolved = (
+                str((self.docs / Path("imgs") / Path("graph")).resolve()) + ".png"
+            )
             subprocess.call(["dot", "-Tpng", resolved, "-o", img_resolved])
             self.status = img_resolved
             self.dot = "/docs/imgs/graph.png"

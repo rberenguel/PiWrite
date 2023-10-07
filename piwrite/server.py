@@ -23,7 +23,8 @@ HOST = os.getenv("PIWRITE_HOST", "127.0.0.1")
 DEBUG = os.getenv("PIWRITE_DEBUG", "False") == "True"
 PORT = int(os.getenv("PIWRITE_PORT", 80))
 
-STATIC_FOLDER = (pkg_resources.files('piwrite') / 'static')
+STATIC_FOLDER = pkg_resources.files("piwrite") / "static"
+
 
 def configure_logger():
     """Fancy logging is nicer"""
@@ -109,8 +110,8 @@ async def the_loop():
                 await sio.emit("buffer", {"data": v.get()})
                 # Each key, send a new, different "info" message
                 # Temporarily disabling to check
-                #field = list(update_only_fields.keys())[key_count]
-                #update_only_fields[field]["sent"] = False
+                # field = list(update_only_fields.keys())[key_count]
+                # update_only_fields[field]["sent"] = False
                 for field, val in update_only_fields.items():
                     new_val = val["exec"]()
                     if new_val != val["old"] or not val["sent"]:

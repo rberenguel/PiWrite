@@ -42,7 +42,7 @@ class Buffer:
             indent = len(prev) - len(prev.lstrip())
             self.lines[current_line] = Line(head)
             if len(tail) == 0 and indent > 0:
-                self.lines.insert(current_line + 1, Line(" "*indent))
+                self.lines.insert(current_line + 1, Line(" " * indent))
                 cursor.to(current_line + 1, indent)
             else:
                 self.lines.insert(current_line + 1, Line(tail))
