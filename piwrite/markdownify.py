@@ -22,7 +22,7 @@ STARTS = {
 
 def bolding(line):
     beg_of_word = re.compile(r"(^|\s)(\*\*\S)")
-    end_of_word = re.compile(r"(\S\*\*)($|\s|:)")
+    end_of_word = re.compile(r"(\S\*\*)($|\s|:|\.)")
     new_line = re.sub(beg_of_word, "\\1<b>\\2", line)
     new_line = re.sub(end_of_word, "\\1</b>\\2", new_line)
     return new_line
@@ -39,7 +39,7 @@ def highlighting(line):
 
 def italicising(line):
     beg_of_word = re.compile(r"(^|\s)(_\S)")
-    end_of_word = re.compile(r"(\S_)($|\s|:)")
+    end_of_word = re.compile(r"(\S_)($|\s|:|\.)")
     new_line = re.sub(beg_of_word, "\\1<i>\\2", line)
     new_line = re.sub(end_of_word, "\\1</i>\\2", new_line)
     return new_line
@@ -47,7 +47,7 @@ def italicising(line):
 
 def teletyping(line):
     beg_of_word = re.compile(r"(^|\s)(`\S)")
-    end_of_word = re.compile(r"(\S`)($|\s|:)")
+    end_of_word = re.compile(r"(\S`)($|\s|:|\.)")
     new_line = re.sub(beg_of_word, "\\1<tt>\\2", line)
     new_line = re.sub(end_of_word, "\\1</tt>\\2", new_line)
     return new_line
@@ -60,7 +60,7 @@ def focus(line, idx, current):
 
 
 def markdownify(original_lines, current_line=-1):
-    """Convert simple Markdown to reasonable HTML (with mostly visible Markdown markers), with highlighting of the current line"""
+    """Convert simple Markdown to reasonable HTML (with some visible Markdown markers), with highlighting of the current line"""
     new_lines = []
     skip = False
     for idx, line in enumerate(original_lines):
@@ -73,10 +73,6 @@ def markdownify(original_lines, current_line=-1):
                 focus("""<span class="small">&nbsp;</span>""", idx, current_line)
             )
             continue
-            # escape = True
-        # if escape:
-        # escape = False
-        # continue
 
         newline = bolding(newline)
         newline = italicising(newline)
@@ -86,11 +82,9 @@ def markdownify(original_lines, current_line=-1):
             if line.startswith(key):
                 skip = True
                 if key == "- ":
-                    # newline = key + focus(newline[2:], idx, current_line)
                     newline = transform(newline, idx, current_line)
                 else:
                     newline = transform(newline, idx, current_line)
-                    # newline = focus(newline, idx, current_line)
         else:
             if not skip:
                 newline = focus(newline, idx, current_line)

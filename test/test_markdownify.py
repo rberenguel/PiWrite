@@ -20,6 +20,8 @@ def test_headers(text, converted):
     "text,converted",
     [
         ("**foo**", "<b>**foo**</b><br/>"),
+        ("**foo**.", "<b>**foo**</b>.<br/>"),
+        ("**foo**. aaa", "<b>**foo**</b>. aaa<br/>"),
         (" **foo**", " <b>**foo**</b><br/>"),
         (" **foo** ", " <b>**foo**</b> <br/>"),
         ("**foo** ", "<b>**foo**</b> <br/>"),
@@ -35,6 +37,8 @@ def test_bold(text, converted):
     "text,converted",
     [
         ("_foo_", "<i>_foo_</i><br/>"),
+        ("_foo_.", "<i>_foo_</i>.<br/>"),
+        ("_foo_. aaa", "<i>_foo_</i>. aaa<br/>"),
         (" _foo_", " <i>_foo_</i><br/>"),
         (" _foo_ ", " <i>_foo_</i> <br/>"),
         ("_foo_ ", "<i>_foo_</i> <br/>"),
@@ -50,6 +54,8 @@ def test_italics(text, converted):
     "text,converted",
     [
         ("`foo`", "<tt>`foo`</tt><br/>"),
+        ("`foo`.", "<tt>`foo`</tt>.<br/>"),
+        ("`foo`. aaa", "<tt>`foo`</tt>. aaa<br/>"),
         (" `foo`", " <tt>`foo`</tt><br/>"),
         (" `foo` ", " <tt>`foo`</tt> <br/>"),
         ("`foo` ", "<tt>`foo`</tt> <br/>"),
