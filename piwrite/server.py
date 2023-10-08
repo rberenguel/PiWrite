@@ -112,6 +112,11 @@ async def the_loop():
                 # Temporarily disabling to check
                 # field = list(update_only_fields.keys())[key_count]
                 # update_only_fields[field]["sent"] = False
+                if v.refresh:
+                    logger.info("Sending a full refresh")
+                    for field, val in update_only_fields.items():
+                        val["sent"] = False
+                    v.refresh = False
                 for field, val in update_only_fields.items():
                     new_val = val["exec"]()
                     if new_val != val["old"] or not val["sent"]:

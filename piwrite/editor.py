@@ -30,6 +30,7 @@ class Editor:
         # TODO: Some could be properties
         # TODO: Some should be saved and restored on quit
         self.buffer = Buffer()
+        self.refresh = False
         self._history_pointer = 0
         self._history = [Buffer()]
         self._mode = Mode.NORMAL
@@ -170,6 +171,10 @@ class Editor:
 
         if key in self.GENERIC_MOVEMENT:
             self.GENERIC_MOVEMENT[key]()
+            return
+
+        if key == Keys.ControlQ:
+            self.refresh = True
             return
 
         if self._mode == Mode.INSERT:
@@ -388,22 +393,27 @@ class Editor:
             cmd = [":E ", str(help), Keys.ControlM]
             self.send(cmd)
             return
-
+        
         if command == [":", "d", "o", "t", Keys.ControlM]:
             # Render graphviz
             self.clear_command()
             _, tmpname = tempfile.mkstemp()
-            resolved = str(Path(tmpname).resolve())
+            resolved = Path(tmpname).resolve()
             self.previous_file = (
-                resolved,
+                str(resolved),
                 self.filename,
             )  # Keep track of the previous "real" file (if any)
-            cmd = [":W ", resolved, Keys.ControlM]
+            cmd = [":W ", str(resolved), Keys.ControlM]
             self.send(cmd)
-            img_resolved = (
-                str((self.docs / Path("imgs") / Path("graph")).resolve()) + ".png"
-            )
-            subprocess.call(["dot", "-Tpng", resolved, "-o", img_resolved])
+            img_resolved = str((self.docs / Path("imgs") / Path("graph")).resolve()) + ".png"
+            template = (self.docs / Path("dot_template")).read_text()
+            content = resolved.read_text()
+            adapted = resolved.with_suffix(".dot")
+            with adapted.open("a") as f:
+                f.write(template)
+                f.write(content)
+                f.write("}")
+            subprocess.call(["dot", "-Tpng", str(adapted), "-o", img_resolved])
             self.status = img_resolved
             self.dot = "/docs/imgs/graph.png"
             return
