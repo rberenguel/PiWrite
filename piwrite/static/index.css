@@ -186,6 +186,19 @@ h4 {
   z-index: -1;
 }
 
+#modal {
+  padding: 0.5em;
+  display: none;
+  position: absolute;
+  width: 80%;
+  left: 10%;
+  top: 10%;
+  border-radius: 9px;
+  border: 1px solid black;
+  z-index: 10;
+  background: white;
+}
+
 #graph {
   display: none;
 }

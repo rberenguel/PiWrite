@@ -75,6 +75,7 @@ def init_fields():
         "err": {"sent": False, "old": None, "exec": lambda: v.err},
         "filename": {"sent": False, "old": None, "exec": lambda: v.filename},
         "command": {"sent": False, "old": None, "exec": lambda: v.command()},
+        "modal": {"sent": False, "old": None, "exec": lambda: v.modal},
         "status": {"sent": False, "old": None, "exec": lambda: v.status},
         "font": {"sent": False, "old": None, "exec": lambda: v.font},
         "fontsize": {"sent": False, "old": None, "exec": lambda: v.fontsize},

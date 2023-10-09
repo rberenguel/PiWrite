@@ -35,6 +35,7 @@ class Editor:
         self.filename = "unnamed"
         self.previous_file = None
         self.saved = False
+        self.modal = ""
         self.status = None
         self.completions = None
         self.completions_markdownified = None
@@ -167,6 +168,13 @@ class Editor:
 
         if key == Keys.ControlQ:
             self.refresh = True
+            self.clear_command()
+            return
+
+        if key == Keys.Escape and self.modal != "":
+            logger.info("Hiding modal")
+            self.modal = ""
+            self.clear_command()
             return
 
         if self._mode == Mode.INSERT:

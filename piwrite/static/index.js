@@ -13,9 +13,9 @@ function piwrite(){
     if(!e.data || e.data == ""){
       return
     }
-     document.getElementById("status").innerHTML = e.data
+    document.getElementById("status").innerHTML = e.data
   });
-  
+
   socket.on('completions', function (e) {
     document.getElementById("completions").innerHTML = e.data
   });
@@ -24,7 +24,7 @@ function piwrite(){
       return
     }
     document.getElementById("field").style.fontSize = e.data + "px"
-    })
+  })
 
   socket.on('dot', function (e) {
     console.log("Receiving dot:")
@@ -41,7 +41,7 @@ function piwrite(){
       document.getElementById("graph").src = e.data
       document.getElementById("graph").style.display = "block"
     }
-    })
+  })
 
 
   socket.on('font', function (e) {
@@ -72,7 +72,7 @@ function piwrite(){
       document.getElementById("field").classList.remove("serif")
       document.getElementById("field").classList.remove("sans")
     }
-    });
+  });
 
   rotated = false
 
@@ -98,6 +98,17 @@ function piwrite(){
     }
   });
 
+  socket.on('modal', function (e) {
+    console.log("Receiving modal:")
+    console.log(e)
+    if(e.data == ""){
+      document.getElementById("modal").style.display = "none"
+      document.getElementById("modal").innerHTML = ""
+    } else {
+      document.getElementById("modal").style.display = "block"
+      document.getElementById("modal").innerHTML = e.data
+    }
+  });
 
   socket.on('command', function (e) {
     document.getElementById("status").innerHTML = e.data
@@ -106,7 +117,7 @@ function piwrite(){
   socket.on('mode', function (e) {
     document.getElementById("mode").innerHTML = e.data
   });
- 
+
   socket.on('saved', function (e) {
     if(e.data){
       document.getElementById("saved").innerHTML = "&nbsp;"
@@ -120,20 +131,20 @@ function piwrite(){
   })
 
   socket.on('buffer', function (e) {
-  document.getElementById("field").innerHTML = e.data.join("")
-      range = document.createRange()
-      range.setStartBefore(document.getElementById("caret"))
-      range.setEndAfter(document.getElementById("caret"))
-      clientRect = range.getBoundingClientRect()
-      if(rotated){
-        return
-      } else {
-        curr = document.getElementById("field").getBoundingClientRect().top 
-        adjusted = curr-clientRect.top
-        if(Math.abs(clientRect.top)>200){
-          adjusted+=200
-        }
+    document.getElementById("field").innerHTML = e.data.join("")
+    range = document.createRange()
+    range.setStartBefore(document.getElementById("caret"))
+    range.setEndAfter(document.getElementById("caret"))
+    clientRect = range.getBoundingClientRect()
+    if(rotated){
+      return
+    } else {
+      curr = document.getElementById("field").getBoundingClientRect().top 
+      adjusted = curr-clientRect.top
+      if(Math.abs(clientRect.top)>200){
+        adjusted+=200
       }
-      document.getElementById("field").style.top = adjusted+"px"
-   });
+    }
+    document.getElementById("field").style.top = adjusted+"px"
+  });
 }

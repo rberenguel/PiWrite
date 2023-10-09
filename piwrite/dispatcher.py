@@ -8,6 +8,7 @@ from pathlib import Path
 
 from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
+from readability import Readability
 
 from piwrite.buffer import Buffer
 from piwrite.cursor import Cursor
@@ -181,6 +182,26 @@ class Dispatcher:
             self.editor.completions_markdownified = (
                 None  # TODO: wrap these two in a function
             )
+            return
+        if command == [":", "r", "e", "a", "d", Keys.ControlM]:
+            self.editor.clear_command()
+            content = "".join([str(lin) for lin in self.editor.buffer.get()])
+            content = (
+                content.replace("*", " ")
+                .replace("_", " ")
+                .replace("#", " ")
+                .replace(":", " ")
+            )
+            r = Readability(content)
+            try:
+                fc = r.flesch_kincaid()
+                f = r.flesch()
+                fc_line = f"<b>Flesch-Kincaid</b><br/>&nbsp; score: {fc.score:.2f}<br/>&nbsp; grade: {fc.grade_level} (1-18)"
+                f_line = f"<b>Flesch ease</b><br/>&nbsp; ease: {f.ease} ({f.score:.2f})"
+                modal = "<br/>".join([fc_line, f_line])
+                self.editor.modal = modal
+            except Exception as e:
+                self.editor.status = f"Readability failure: {e}"
             return
         if command == [":", "q", Keys.ControlM]:
             self.editor.clear_command()
