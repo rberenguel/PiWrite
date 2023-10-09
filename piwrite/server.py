@@ -19,6 +19,13 @@ logger = logging.getLogger("piwrite")
 
 from piwrite.editor import Editor
 
+try:
+    # This means you need to run it at least once without access point mode
+    import nltk
+    nltk.download('punkt')
+except:
+    pass
+
 HOST = os.getenv("PIWRITE_HOST", "127.0.0.1")
 DEBUG = os.getenv("PIWRITE_DEBUG", "False") == "True"
 PORT = int(os.getenv("PIWRITE_PORT", 80))
