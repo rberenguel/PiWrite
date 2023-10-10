@@ -34,14 +34,18 @@ function piwrite(){
       return
     }
     if(e.data == "nope"){
-      document.getElementById("wrapper").style.display = "block"
       document.getElementById("graph").style.display = "none"
       document.getElementById("graph").src = ""
-    } else {
-      document.getElementById("wrapper").style.display = "none"
+      document.getElementById("wrapper").style.height = "auto"
+      document.getElementById("wrapper").style.overflow = "hidden" 
+      document.getElementById("bottom").style.display = "block"
+     } else {
       document.getElementById("graph").src = e.data
       document.getElementById("graph").style.display = "block"
-    }
+      document.getElementById("wrapper").style.height = "auto"
+      document.getElementById("wrapper").style.overflow = "hidden" 
+      document.getElementById("bottom").style.display = "block"
+     }
   })
 
   function addStyle(elem, stylename){

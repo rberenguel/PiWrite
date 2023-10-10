@@ -6,11 +6,11 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
+from readability import Readability
+
 from proselint import config as proselint_config
 from proselint import tools as proselint_tools
-from readability import Readability
 
 from piwrite.buffer import Buffer
 from piwrite.cursor import Cursor
@@ -282,7 +282,7 @@ class Dispatcher:
         if command == [":", "q", Keys.ControlM]:
             self.editor.clear_command()
             if self.editor.saved:
-                self.editor.status = "Shutting down"  # This will never show, blocking
+                self.editor.status = "Shutting down" # This will never show, blocking
                 time.sleep(1)  # I want this real blocking here
                 subprocess.call(["shutdown", "-h", "now"])
             else:
@@ -331,7 +331,7 @@ class Dispatcher:
                 f.write(template)
                 f.write(content)
                 f.write("}")
-            # subprocess.call(["dot", "-Tpng", str(adapted), "-o", img_resolved])
+            subprocess.call(["dot", "-Tpng", str(adapted), "-o", img_resolved])
             self.editor.status = img_resolved
             self.editor.updating_fields.append("status")
             self.editor.dot = "/docs/imgs/graph.png"
