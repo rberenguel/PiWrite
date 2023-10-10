@@ -46,7 +46,7 @@ class Editor:
         self.completions = None
         self.completions_markdownified = None
         self.font = "serif"
-        self.fontsize = 14
+        self.fontsize = 12
         self.err = None
         home = Path.home()
         self.docs = home / "piwrite-docs/"
