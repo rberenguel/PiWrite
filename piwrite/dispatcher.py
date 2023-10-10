@@ -222,16 +222,19 @@ class Dispatcher:
                 [1 for lin in self.editor.buffer.get() if len(str(lin).strip()) > 0]
             )
             r = Readability(content)
+            fc_line = ""
+            f_line = ""
+            w_line = f"<b>Stats and readability</b><br/>&nbsp; word count: {words}<br/>&nbsp; paragraphs: {pars}"
             try:
                 fc = r.flesch_kincaid()
                 f = r.flesch()
-                w_line = f"<b>Stats and readability</b><br/>&nbsp; word count: {words}<br/>&nbsp; paragraphs: {pars}"
                 fc_line = f"<b>Flesch-Kincaid</b><br/>&nbsp; score: {fc.score:.2f}<br/>&nbsp; grade: {fc.grade_level} (1-18)"
                 f_line = f"<b>Flesch ease</b><br/>&nbsp; ease: {f.ease} ({f.score:.2f})"
+            except Exception as e:
+                f_line = f"Readability failure: {e}"
+            finally:
                 modal = "<br/>".join([w_line, fc_line, f_line])
                 self.editor.modal = modal
-            except Exception as e:
-                self.editor.status = f"Readability failure: {e}"
             return
 
         if command == [":", "l", "i", "n", "t", Keys.ControlM]:
