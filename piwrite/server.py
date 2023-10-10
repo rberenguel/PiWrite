@@ -17,20 +17,9 @@ from prompt_toolkit.keys import Keys
 
 logger = logging.getLogger("piwrite")
 
-from piwrite.editor import Editor
-
 import nltk
 
-try:
-    nltk.data.find("tokenizers/punkt")
-except LookupError:
-    print("Punkt not available")
-    try:
-        # This means you need to run it at least
-        # once without access point mode
-        nltk.download("punkt")
-    except:
-        pass
+from piwrite.editor import Editor
 
 HOST = os.getenv("PIWRITE_HOST", "127.0.0.1")
 DEBUG = os.getenv("PIWRITE_DEBUG", "False") == "True"
@@ -123,20 +112,13 @@ async def the_loop():
                 if v.refresh:
                     logger.info("Sending a full refresh")
                     for field, val in update_only_map.items():
-                        val["sent"] = False
+                        await sio.emit(field, {"data": val["exec"]()})
                     v.refresh = False
-                for field in update_only_fields:
-                    # I was having issues in different versions of Python
-                    # Not sure if because of globals, or editing the dict
-                    # while traversing, so… ugly works here
+                logger.info(f"Updating {len(v.updating_fields)} fields")
+                for field in v.updating_fields:
                     new_val = update_only_map[field]["exec"]()
-                    old_val = update_only_map[field]["old"]
-                    sent = update_only_map[field]["sent"]
-                    if new_val != old_val or not sent:
-                        update_only_map[field]["old"] = new_val
-                        logger.info(f"Sending {field}")
-                        await sio.emit(field, {"data": new_val})
-                        update_only_map[field]["sent"] = True
+                    await sio.emit(field, {"data": new_val})
+                v.updating_fields.clear()
                 key.clear()
 
 
@@ -150,7 +132,7 @@ async def main():
     await runner.setup()
     site = aiohttp.web.TCPSite(runner, host=HOST, port=PORT)
     await site.start()
-    logger.info(f"Server started at '{HOST}:{PORT}'")
+    logger.warning(f"Server started at '{HOST}:{PORT}'")
     await the_loop()
     await asyncio.Event().wait()
 
@@ -162,7 +144,17 @@ def start():
     elif INFO:
         logger.setLevel(logging.INFO)
     else:
-        logger.setLevel(logging.ERROR)
+        logger.setLevel(logging.WARNING)
+    try:
+        nltk.data.find("tokenizers/punkt")
+    except LookupError:
+        logger.warning("Punkt not available")
+        try:
+            # This means you need to run it at least
+            # once without access point mode
+            nltk.download("punkt")
+        except:
+            pass
     asyncio.run(main())
 
 

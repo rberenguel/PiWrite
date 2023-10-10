@@ -8,10 +8,9 @@ from pathlib import Path
 
 from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
-from readability import Readability
-
 from proselint import config as proselint_config
 from proselint import tools as proselint_tools
+from readability import Readability
 
 from piwrite.buffer import Buffer
 from piwrite.cursor import Cursor
@@ -31,10 +30,11 @@ class Dispatcher:
 
     def dispatch_command(self, command):
         # TODO: A Trie for this would work sooo much better than doing it by hand
-        logger.info("Dispatching" + str(command))
+        logger.info("Dispatching %s", str(command))
         if command == ["i"]:
             self.editor.clear_command()
             self.editor._mode = Mode.INSERT
+            self.editor.updating_fields.append("mode")
             self.editor.cursor -= 1  # Seems to be giving problems!?
             self.editor.buffer.clip(self.editor.cursor)
             return
@@ -45,6 +45,7 @@ class Dispatcher:
         if command == ["v"]:
             lines = [str(lin) for lin in self.editor.buffer.get()]
             self.editor.visual = markdownify(lines, visible=False)
+            self.editor.updating_fields.append("visual")
             return
         if command[-1] == Keys.ControlH:
             self.editor._command = self.editor._command[0:-2]
@@ -52,12 +53,16 @@ class Dispatcher:
             self.editor.completions_markdownified = (
                 None  # TODO: wrap these two in a function
             )
+            self.editor.updating_fields.append("command")
+            self.editor.updating_fields.append("completions")
             return
         if command[-1] in self.editor.GENERIC_MOVEMENT:
             self.editor.status = (
                 "I didn't bother implementing arrows or C-a/C-e here, sorry"
             )
+            self.editor.updating_fields.append("status")
             self.editor._command.pop()
+            self.editor.updating_fields.append("command")
             return
         if command == ["d"] or command == ["d", "a"] or command == ["d", "i"]:
             return
@@ -67,15 +72,18 @@ class Dispatcher:
         if command == ["a"]:
             self.editor.clear_command()
             self.editor._mode = Mode.INSERT
+            self.editor.updating_fields.append("mode")
             return
         if command == ["I"]:
             self.editor.clear_command()
             self.editor._mode = Mode.INSERT
+            self.editor.updating_fields.append("mode")
             self.editor.cursor.to(column=0, line=self.editor.cursor.line)
             return
         if command == ["A"]:
             self.editor.clear_command()
             self.editor._mode = Mode.INSERT
+            self.editor.updating_fields.append("mode")
             lin = self.editor.cursor.line
             end = len(self.editor.buffer[lin])
             self.editor.cursor.to(column=end, line=lin)
@@ -84,6 +92,7 @@ class Dispatcher:
         if command == ["o"]:
             self.editor.clear_command()
             self.editor._mode = Mode.INSERT
+            self.editor.updating_fields.append("mode")
             lin = self.editor.cursor.line
             self.editor.buffer.lines.insert(lin + 1, Line())
             self.editor.cursor.to(column=0, line=lin + 1)
@@ -97,11 +106,11 @@ class Dispatcher:
                 logger.info("No further undo")
                 self.editor.status = "No further undo information"
                 self.editor._history_pointer = 0
-            logger.debug(f"Undoing at {self.editor._history_pointer}")
+            logger.debug("Undoing at %s", self.editor._history_pointer)
             self.editor.buffer = self.editor._history[
                 self.editor._history_pointer
             ].copy()
-            logger.debug(f"Buffer now: {self.editor.buffer}")
+            logger.debug("Buffer now: %s", self.editor.buffer)
             self.editor.buffer.clip(self.editor.cursor)
             return
 
@@ -190,7 +199,9 @@ class Dispatcher:
             self.editor.clear_command()
             self.editor.send(cmd)
             self.editor.dot = "nope"
+            self.editor.updating_fields.append("dot")
             self.editor.filename = self.editor.previous_file[1]
+            self.editor.updating_fields.append("filename")
             Path(self.editor.previous_file[0]).unlink()
             self.editor.previous_file = None
 
@@ -202,11 +213,13 @@ class Dispatcher:
             self.editor.completions_markdownified = (
                 None  # TODO: wrap these two in a function
             )
+            self.editor.updating_fields.append("completions")
             return
         if command == [":", "k", "e", "y", "s", Keys.ControlM]:
             self.editor.clear_command()
             self.editor.log_keys = True
             self.editor.status = "Logging keys to buffer"
+            self.editor.updating_fields.append("status")
             return
         if command == [":", "s", "t", "a", "t", "s", Keys.ControlM]:
             self.editor.clear_command()
@@ -235,6 +248,7 @@ class Dispatcher:
             finally:
                 modal = "<br/>".join([w_line, fc_line, f_line])
                 self.editor.modal = modal
+                self.editor.updating_fields.append("modal")
             return
 
         if command == [":", "l", "i", "n", "t", Keys.ControlM]:
@@ -260,12 +274,15 @@ class Dispatcher:
                 self.editor.modal = "<br>".join(suggestions)
             self.editor.filename = previous_file
             self.editor.saved = previous_save_status
+            self.editor.updating_fields.append("modal")
+            self.editor.updating_fields.append("filename")
+            self.editor.updating_fields.append("saved")
             return
 
         if command == [":", "q", Keys.ControlM]:
             self.editor.clear_command()
             if self.editor.saved:
-                self.editor.status = "Shutting down"
+                self.editor.status = "Shutting down"  # This will never show, blocking
                 time.sleep(1)  # I want this real blocking here
                 subprocess.call(["shutdown", "-h", "now"])
             else:
@@ -314,9 +331,11 @@ class Dispatcher:
                 f.write(template)
                 f.write(content)
                 f.write("}")
-            subprocess.call(["dot", "-Tpng", str(adapted), "-o", img_resolved])
+            # subprocess.call(["dot", "-Tpng", str(adapted), "-o", img_resolved])
             self.editor.status = img_resolved
+            self.editor.updating_fields.append("status")
             self.editor.dot = "/docs/imgs/graph.png"
+            self.editor.updating_fields.append("dot")
             return
 
         if command[0:2] == [":", "w"] and command[-1] == Keys.ControlM:
@@ -324,15 +343,20 @@ class Dispatcher:
             filename = "".join(command[3:-1])
             if filename.strip() == "":
                 filename = self.editor.filename
+                self.editor.updating_fields.append("filename")
             try:
                 (self.editor.docs / filename).write_text(
                     "\n".join([str(lin) for lin in self.editor.buffer.get()])
                 )
                 self.editor.filename = filename
+                self.editor.updating_fields.append("filename")
                 self.editor.saved = True
+                self.editor.updating_fields.append("saved")
                 self.editor.status = f"Saved as {filename}"
+                self.editor.updating_fields.append("status")
             except Exception as e:
                 self.editor.err = str(e)
+                self.editor.updating_fields.append("err")
             self.editor.clear_command()
             return
         if command[0:2] == [":", "W"] and command[-1] == Keys.ControlM:
@@ -345,8 +369,12 @@ class Dispatcher:
                 self.editor.filename = filename
                 self.editor.saved = True
                 self.editor.status = f"Special saved as {filename}"
+                self.editor.updating_fields.append("filename")
+                self.editor.updating_fields.append("saved")
+                self.editor.updating_fields.append("status")
             except Exception as e:
                 self.editor.err = str(e)
+                self.editor.updating_fields.append("err")
             self.editor.clear_command()
             return
         if "".join(command[0:4]) == ":rot" and command[-1] == Keys.ControlM:
@@ -354,32 +382,41 @@ class Dispatcher:
                 self.editor.rot = "90"
             else:
                 self.editor.rot = "0"
+            self.editor.updating_fields.append("rot")
             self.editor.clear_command()
             return
         if "".join(command[0:5]) == ":mono" and command[-1] == Keys.ControlM:
             self.editor.font = "mono"
+            self.editor.updating_fields.append("font")
             self.editor.clear_command()
             return
         if "".join(command[0:5]) == ":sans" and command[-1] == Keys.ControlM:
             self.editor.font = "sans"
+            self.editor.updating_fields.append("font")
             self.editor.clear_command()
             return
         if "".join(command[0:6]) == ":serif" and command[-1] == Keys.ControlM:
             self.editor.font = "serif"
+            self.editor.updating_fields.append("font")
             self.editor.clear_command()
             return
         if "".join(command[0:6]) == ":latex" and command[-1] == Keys.ControlM:
             self.editor.font = "latex"
+            self.editor.updating_fields.append("font")
             self.editor.clear_command()
             return
         if "".join(command[0:9]) == ":fontsize" and command[-1] == Keys.ControlM:
             self.editor.fontsize = int("".join(command[10:-1]).strip())
             self.editor.status = f"Set font size to {self.editor.fontsize}"
+            self.editor.updating_fields.append("fontsize")
+            self.editor.updating_fields.append("status")
             self.editor.clear_command()
             return
         if "".join(command[0:3]) == ":fs" and command[-1] == Keys.ControlM:
             self.editor.fontsize = int("".join(command[4:-1]).strip())
             self.editor.status = f"Set font size to {self.editor.fontsize}"
+            self.editor.updating_fields.append("fontsize")
+            self.editor.updating_fields.append("status")
             self.editor.clear_command()
             return
         if (command[0:2] == [":", "e"] or command[0:3] == [":", "e", "!"]) and command[
@@ -388,12 +425,13 @@ class Dispatcher:
             command.pop()  # Drop the tab
             if self.editor.completions is None:
                 filename = "".join(command).replace(":e!", "").replace(":e", "").strip()
-                logger.debug(f"Globbing on {filename}")
+                logger.debug("Globbing on %s", filename)
                 files = [str(f.name) for f in self.editor.docs.glob(filename + "*")]
                 if len(files) == 0:
                     self.editor.completions = None
                 else:
                     self.editor.completions = {"files": files, "idx": -1}
+                self.editor.updating_fields.append("completions")
             else:
                 self.editor.completions["idx"] = (
                     self.editor.completions["idx"] + 1
@@ -408,6 +446,7 @@ class Dispatcher:
                 self.editor.completions_markdownified = markdownify(
                     [" ".join(md)], visible=False
                 )
+                self.editor.updating_fields.append("completions")
             return
         if command[0:4] == [":", "v", "i", "z"] and command[-1] == Keys.ControlM:
             try:
@@ -422,6 +461,7 @@ class Dispatcher:
                     self.editor.viz = (viz, shift)
             except Exception as e:
                 self.editor.status = f"viz has to be of the form int:int or empty ({e})"
+                self.editor.updating_fields.append("status")
             finally:
                 self.editor.clear_command()
             self.editor.status = f"Setting shift to {self.editor.viz}"
@@ -429,6 +469,8 @@ class Dispatcher:
         if command[0:3] == [":", "e", "!"] and command[-1] == Keys.ControlM:
             self.editor.status = ""
             self.editor.saved = True
+            self.editor.updating_fields.append("saved")
+            self.editor.updating_fields.append("status")
             if self.editor.completions is None:
                 filename = "".join(command[4:-1])
             else:
@@ -441,6 +483,7 @@ class Dispatcher:
         if command[0:2] == [":", "e"] and command[-1] == Keys.ControlM:
             if not self.editor.saved:
                 self.editor.status = "You have unsaved changes"
+                self.editor.updating_fields.append("saved")
                 return
             if self.editor.completions is None:
                 filename = "".join(command[3:-1])
@@ -456,8 +499,12 @@ class Dispatcher:
                 self.editor.filename = filename
                 self.editor.saved = True
                 self.editor.status = f"Loaded {self.editor.filename}"
+                self.editor.updating_fields.append("status")
+                self.editor.updating_fields.append("saved")
+                self.editor.updating_fields.append("filename")
             except Exception as e:
                 self.editor.err = str(e)
+                self.editor.updating_fields.append("err")
             self.editor.cursor.to(0, 0)
             self.editor.clear_command()
             if self.editor.filename.endswith(".dot"):
@@ -471,15 +518,19 @@ class Dispatcher:
                     self.editor.completions["idx"]
                 ]
             try:
-                logger.debug(f"Opening {filename}")
+                logger.debug("Opening %s", filename)
                 text = Path(filename).read_text()
                 lines = text.split("\n")
                 self.editor.buffer = Buffer([Line(line) for line in lines])
                 self.editor.filename = Path(filename).name
                 self.editor.saved = True
                 self.editor.status = f"Loaded {self.editor.filename}"
+                self.editor.updating_fields.append("status")
+                self.editor.updating_fields.append("saved")
+                self.editor.updating_fields.append("filename")
             except Exception as e:
                 self.editor.err = str(e)
+                self.editor.updating_fields.append("err")
             self.editor.clear_command()
             self.editor.cursor.to(0, 0)
             return

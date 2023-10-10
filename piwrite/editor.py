@@ -9,7 +9,6 @@ from pathlib import Path
 
 from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
-
 from proselint import config as proselint_config
 from proselint import tools as proselint_tools
 
@@ -32,6 +31,7 @@ class Editor:
         self._mode = Mode.NORMAL
         self._command = []
         self.yank = [""]
+        self.updating_fields = []
         self.viz = None
         self.setup_movement()
         self.rot = "0"
@@ -182,6 +182,7 @@ class Editor:
             )
             suggestions = [f"At {sug[3]}: {sug[1]}" for sug in p_suggestions]
             self.modal = "<br>".join(suggestions)
+            self.updating_fields.append("modal")
             return
 
         if key in self.GENERIC_MOVEMENT:
@@ -196,22 +197,25 @@ class Editor:
         if key == Keys.Escape and self.modal != "":
             logger.info("Hiding modal")
             self.modal = ""
+            self.updating_fields.append("modal")
             self.clear_command()
             return
 
-        if key == Keys.Escape and self.visual != "":
+        if key == "q" and self.visual != "":
             logger.info("Hiding visual")
             self.visual = ""
+            self.updating_fields.append("visual")
             self.clear_command()
             return
 
         if self._mode == Mode.INSERT:
             if key == Keys.Escape:
                 self._mode = Mode.NORMAL
+                self.updating_fields.append("mode")
                 self.cursor -= 1  # This seems to be the vim behaviour
                 self.buffer.clip(self.cursor)
                 logger.debug(
-                    f"History before: {self._history}, {self._history_pointer}"
+                    "History before: %s, %s", self._history, self._history_pointer
                 )
                 # TODO: All this needs better testing, and it may get tricky
                 if self._history_pointer + 1 >= len(self._history):
@@ -221,12 +225,16 @@ class Editor:
                     self._history[self._history_pointer + 1] = self.buffer.copy()
                 self._history_pointer += 1
                 self._history_pointer = min(self._history_pointer, self.UNDO_DEPTH - 1)
-                logger.debug(f"Clipping pointer at {self._history_pointer}")
+                logger.debug("Clipping pointer at %s", self._history_pointer)
                 if len(self._history) > self.UNDO_DEPTH:
                     self._history = self._history[-self.UNDO_DEPTH :]
                     assert len(self._history) == self.UNDO_DEPTH
-                logger.debug(f"History after: {self._history}, {self._history_pointer}")
+                logger.debug(
+                    "History after: %s, %s", self._history, self._history_pointer
+                )
                 return
+            if self.saved:
+                self.updating_fields.append("saved")
             self.saved = False
             if key == Keys.Delete or key == Keys.ControlH:
                 self.buffer.delete(self.cursor)
@@ -235,14 +243,18 @@ class Editor:
 
         if self._mode == Mode.NORMAL:
             self._command.append(key)
+            self.updating_fields.append("command")
             self.dispatch_command(self._command)
         return
 
     def clear_command(self):
         self.completions = None
         self.completions_markdownified = None
+        self.updating_fields.append("completions")
         self.status = "&nbsp;"
+        self.updating_fields.append("status")
         self._command = []
+        self.updating_fields.append("command")
 
     def command(self):
         filt = [str(l) for l in self._command if len(str(l)) == 1]
