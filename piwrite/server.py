@@ -56,7 +56,6 @@ def configure_logger():
 
 def staticHandle(file):
     async def handler(request):
-        init_fields()
         return aiohttp.web.FileResponse(file)
 
     return handler
@@ -66,12 +65,8 @@ v = Editor()
 
 sio = socketio.AsyncServer(logger=False, engineio_logger=False, async_mode="aiohttp")
 
-update_only_fields = None
-
-
-def init_fields():
-    global update_only_fields
-    update_only_fields = {
+def init_map():
+    update_only_map = {
         "saved": {"sent": False, "old": None, "exec": lambda: v.saved},
         "completions": {
             "sent": False,
@@ -89,6 +84,7 @@ def init_fields():
         "rot": {"sent": False, "old": None, "exec": lambda: v.rot},
         "dot": {"sent": False, "old": None, "exec": lambda: v.dot},
     }
+    return update_only_map
 
 
 async def the_loop():
@@ -96,6 +92,9 @@ async def the_loop():
     key_press = None
     done = asyncio.Event()
     inp = create_input()
+
+    update_only_map = init_map()
+    update_only_fields = list(update_only_map.keys())
 
     def keys_ready():
         nonlocal key_press
@@ -105,33 +104,30 @@ async def the_loop():
             if key_press.key == Keys.ControlC:
                 done.set()
 
-    key_count = 0
-    init_fields()
     with inp.raw_mode():
         with inp.attach(keys_ready):
             while True:
                 await key.wait()
-                key_count += 1
-                key_count = key_count % (len(update_only_fields.values()))
                 logger.debug(key_press)
                 v.dispatch(key_press)
                 await sio.emit("buffer", {"data": v.get()})
-                # Each key, send a new, different "info" message
-                # Temporarily disabling to check
-                # field = list(update_only_fields.keys())[key_count]
-                # update_only_fields[field]["sent"] = False
                 if v.refresh:
                     logger.info("Sending a full refresh")
                     for field, val in update_only_fields.items():
                         val["sent"] = False
                     v.refresh = False
-                for field, val in update_only_fields.items():
-                    new_val = val["exec"]()
-                    if new_val != val["old"] or not val["sent"]:
-                        val["old"] = new_val
+                for field in update_only_fields:
+                    # I was having issues in different versions of Python
+                    # Not sure if because of globals, or editing the dict
+                    # while traversing, so… ugly works here
+                    new_val = update_only_map[field]["exec"]()
+                    old_val = update_only_map[field]["old"]
+                    sent = update_only_map[field]["sent"]
+                    if new_val != old_val or not sent:
+                        update_only_map[field]["old"] = new_val
                         logger.info(f"Sending {field}")
                         await sio.emit(field, {"data": new_val})
-                        val["sent"] = True
+                        update_only_map[field]["sent"] = True
                 key.clear()
 
 

@@ -187,6 +187,8 @@ h4 {
 }
 
 #modal {
+  font-family: "monoid";
+  font-size: 10pt;
   padding: 0.5em;
   display: none;
   position: absolute;

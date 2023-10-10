@@ -10,7 +10,11 @@ from pathlib import Path
 from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
 
+from proselint import config as proselint_config
+from proselint import tools as proselint_tools
+
 from piwrite.dispatcher import Dispatcher
+from piwrite.line import Line
 from piwrite.markdownify import markdownify
 from piwrite.mode import Mode
 
@@ -32,6 +36,7 @@ class Editor:
         self.setup_movement()
         self.rot = "0"
         self.dot = "nope"
+        self.log_keys = False
         self.filename = "unnamed"
         self.previous_file = None
         self.saved = False
@@ -161,6 +166,19 @@ class Editor:
         key = _key.key
         if key == Keys.ControlC:
             sys.exit(0)
+        if key == Keys.Escape and self.log_keys:
+            self.log_keys = False
+            return
+        if self.log_keys:
+            # TODO: move this appending to be a method on buffer
+            self.buffer.lines.append(Line(str(key)))
+            return
+
+        if key == Keys.ControlP:
+            p_suggestions = proselint_tools.lint(str(self.buffer.lines[self.cursor.line]), config=proselint_config.default)
+            suggestions = [f"At {sug[3]}: {sug[1]}" for sug in p_suggestions]
+            self.modal = "<br>".join(suggestions)
+            return
 
         if key in self.GENERIC_MOVEMENT:
             self.GENERIC_MOVEMENT[key]()

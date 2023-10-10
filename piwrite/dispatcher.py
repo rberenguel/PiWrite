@@ -183,6 +183,11 @@ class Dispatcher:
                 None  # TODO: wrap these two in a function
             )
             return
+        if command == [":", "k", "e", "y", "s", Keys.ControlM]:
+            self.editor.clear_command()
+            self.editor.log_keys = True
+            self.editor.status = "Logging keys to buffer"
+            return
         if command == [":", "r", "e", "a", "d", Keys.ControlM]:
             self.editor.clear_command()
             content = "".join([str(lin) for lin in self.editor.buffer.get()])
