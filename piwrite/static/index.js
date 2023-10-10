@@ -113,7 +113,9 @@ function piwrite(){
       document.getElementById("wrapper").style.overflow = "hidden" 
       document.getElementById("visual").innerHTML = ""
       document.getElementById("visual").style.display = "none"
+      document.getElementById("bottom").style.display = "block"
     } else {
+      document.getElementById("bottom").style.display = "none"
       document.getElementById("visual").innerHTML = e.data.join("")
       document.getElementById("visual").style.display = "block"
       document.getElementById("wrapper").style.height = 0

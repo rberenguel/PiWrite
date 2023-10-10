@@ -34,6 +34,7 @@ except LookupError:
 
 HOST = os.getenv("PIWRITE_HOST", "127.0.0.1")
 DEBUG = os.getenv("PIWRITE_DEBUG", "False") == "True"
+INFO = os.getenv("PIWRITE_INFO", "False") == "True"
 PORT = int(os.getenv("PIWRITE_PORT", 80))
 
 STATIC_FOLDER = pkg_resources.files("piwrite") / "static"
@@ -158,8 +159,10 @@ def start():
     configure_logger()
     if DEBUG:
         logger.setLevel(logging.DEBUG)
-    else:
+    else if INFO:
         logger.setLevel(logging.INFO)
+    else:
+        logger.setLevel(logging.ERROR)
     asyncio.run(main())
 
 
