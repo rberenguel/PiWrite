@@ -31,7 +31,7 @@ class Editor:
         self._mode = Mode.NORMAL
         self._command = []
         self.yank = [""]
-        self.updating_fields = []
+        self.updating_fields = set()
         self.viz = None
         self.setup_movement()
         self.rot = "0"
@@ -182,7 +182,7 @@ class Editor:
             )
             suggestions = [f"At {sug[3]}: {sug[1]}" for sug in p_suggestions]
             self.modal = "<br>".join(suggestions)
-            self.updating_fields.append("modal")
+            self.updating_fields.add("modal")
             return
 
         if key in self.GENERIC_MOVEMENT:
@@ -197,21 +197,21 @@ class Editor:
         if key == Keys.Escape and self.modal != "":
             logger.info("Hiding modal")
             self.modal = ""
-            self.updating_fields.append("modal")
+            self.updating_fields.add("modal")
             self.clear_command()
             return
 
         if key == "q" and self.visual != "":
             logger.info("Hiding visual")
             self.visual = ""
-            self.updating_fields.append("visual")
+            self.updating_fields.add("visual")
             self.clear_command()
             return
 
         if self._mode == Mode.INSERT:
             if key == Keys.Escape:
                 self._mode = Mode.NORMAL
-                self.updating_fields.append("mode")
+                self.updating_fields.add("mode")
                 self.cursor -= 1  # This seems to be the vim behaviour
                 self.buffer.clip(self.cursor)
                 logger.debug(
@@ -234,7 +234,7 @@ class Editor:
                 )
                 return
             if self.saved:
-                self.updating_fields.append("saved")
+                self.updating_fields.add("saved")
             self.saved = False
             if key == Keys.Delete or key == Keys.ControlH:
                 self.buffer.delete(self.cursor)
@@ -243,18 +243,18 @@ class Editor:
 
         if self._mode == Mode.NORMAL:
             self._command.append(key)
-            self.updating_fields.append("command")
+            self.updating_fields.add("command")
             self.dispatch_command(self._command)
         return
 
     def clear_command(self):
         self.completions = None
         self.completions_markdownified = None
-        self.updating_fields.append("completions")
+        self.updating_fields.add("completions")
         self.status = "&nbsp;"
-        self.updating_fields.append("status")
+        self.updating_fields.add("status")
         self._command = []
-        self.updating_fields.append("command")
+        self.updating_fields.add("command")
 
     def command(self):
         filt = [str(l) for l in self._command if len(str(l)) == 1]
