@@ -198,10 +198,11 @@ h4 {
   display: none;
   position: absolute;
   width: 80%;
-  left: 10%;
+  left: 8%;
+  max-height: 800px;
   top: 10%;
   border-radius: 9px;
-  border: 1px solid black;
+  border: 3px solid black;
   z-index: 10;
   background: white;
 }

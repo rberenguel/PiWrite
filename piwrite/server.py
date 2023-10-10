@@ -121,7 +121,7 @@ async def the_loop():
                 await sio.emit("buffer", {"data": v.get()})
                 if v.refresh:
                     logger.info("Sending a full refresh")
-                    for field, val in update_only_fields.items():
+                    for field, val in update_only_map.items():
                         val["sent"] = False
                     v.refresh = False
                 for field in update_only_fields:

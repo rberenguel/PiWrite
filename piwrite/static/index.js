@@ -46,7 +46,9 @@ function piwrite(){
 
   function addStyle(elem, stylename){
     styles = ["monospace", "serif", "sans", "latex"]
-    for(let style of styles){
+    for(i=0;i<styles.length;i++){
+      // Missing let of here, blame the old browser in the Kindle
+      style = styles[i]
       if(style==stylename){
         elem.classList.add(stylename)
       }else{
@@ -102,20 +104,22 @@ function piwrite(){
       rotated = true
     }
   });
- 
-  socket.on('visual', function (e) {
-    console.log("Receiving visual:")
-    if(e.data == ""){
-      document.getElementById("visual").style.display = "none"
-      document.getElementById("wrapper").style.display = "block"
-      document.getElementById("visual").innerHTML = ""
-    } else {
-      document.getElementById("visual").style.display = "block"
-      document.getElementById("wrapper").style.display = "none"
-      document.getElementById("visual").innerHTML = e.data.join("")
-    }
-  });
 
+  socket.on('visual', function (e) {  
+    console.log("Receiving visual")
+    // Having to use height is one of those barfs of the Kindle browser
+    if(!e.data || e.data.length == 0){
+      document.getElementById("wrapper").style.height = "auto"
+      document.getElementById("wrapper").style.overflow = "hidden" 
+      document.getElementById("visual").innerHTML = ""
+      document.getElementById("visual").style.display = "none"
+    } else {
+      document.getElementById("visual").innerHTML = e.data.join("")
+      document.getElementById("visual").style.display = "block"
+      document.getElementById("wrapper").style.height = 0
+      document.getElementById("wrapper").style.overflow = "hidden"
+    }
+  }); 
 
   socket.on('modal', function (e) {
     console.log("Receiving modal:")
@@ -123,9 +127,11 @@ function piwrite(){
     if(e.data == ""){
       document.getElementById("modal").style.display = "none"
       document.getElementById("modal").innerHTML = ""
+      document.getElementById("field").style.opacity = 1
     } else {
       document.getElementById("modal").style.display = "block"
       document.getElementById("modal").innerHTML = e.data
+      document.getElementById("field").style.opacity = 0.3
     }
   });
 
