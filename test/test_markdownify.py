@@ -36,6 +36,23 @@ def test_bold(text, converted):
 @pytest.mark.parametrize(
     "text,converted",
     [
+        ("**foo**", "<b>foo</b><br/>"),
+        ("**foo**.", "<b>foo</b>.<br/>"),
+        ("**foo**. aaa", "<b>foo</b>. aaa<br/>"),
+        (" **foo**", " <b>foo</b><br/>"),
+        (" **foo** ", " <b>foo</b> <br/>"),
+        ("**foo** ", "<b>foo</b> <br/>"),
+        ("**foo**: ", "<b>foo</b>: <br/>"),
+        (" **foo bar** ", " <b>foo bar</b> <br/>"),
+    ],
+)
+def test_bold_hidden(text, converted):
+    assert markdownify([text], visible=False)[0] == converted
+
+
+@pytest.mark.parametrize(
+    "text,converted",
+    [
         ("_foo_", "<i>_foo_</i><br/>"),
         ("_foo_.", "<i>_foo_</i>.<br/>"),
         ("_foo_. aaa", "<i>_foo_</i>. aaa<br/>"),
@@ -53,6 +70,23 @@ def test_italics(text, converted):
 @pytest.mark.parametrize(
     "text,converted",
     [
+        ("_foo_", "<i>foo</i><br/>"),
+        ("_foo_.", "<i>foo</i>.<br/>"),
+        ("_foo_. aaa", "<i>foo</i>. aaa<br/>"),
+        (" _foo_", " <i>foo</i><br/>"),
+        (" _foo_ ", " <i>foo</i> <br/>"),
+        ("_foo_ ", "<i>foo</i> <br/>"),
+        ("_foo_: ", "<i>foo</i>: <br/>"),
+        (" _foo bar_ ", " <i>foo bar</i> <br/>"),
+    ],
+)
+def test_italics_hidden(text, converted):
+    assert markdownify([text], visible=False)[0] == converted
+
+
+@pytest.mark.parametrize(
+    "text,converted",
+    [
         ("`foo`", "<tt>`foo`</tt><br/>"),
         ("`foo`.", "<tt>`foo`</tt>.<br/>"),
         ("`foo`. aaa", "<tt>`foo`</tt>. aaa<br/>"),
@@ -65,6 +99,23 @@ def test_italics(text, converted):
 )
 def test_tt(text, converted):
     assert markdownify([text])[0] == converted
+
+
+@pytest.mark.parametrize(
+    "text,converted",
+    [
+        ("`foo`", "<tt>foo</tt><br/>"),
+        ("`foo`.", "<tt>foo</tt>.<br/>"),
+        ("`foo`. aaa", "<tt>foo</tt>. aaa<br/>"),
+        (" `foo`", " <tt>foo</tt><br/>"),
+        (" `foo` ", " <tt>foo</tt> <br/>"),
+        ("`foo` ", "<tt>foo</tt> <br/>"),
+        ("`foo`: ", "<tt>foo</tt>: <br/>"),
+        (" `foo bar` ", " <tt>foo bar</tt> <br/>"),
+    ],
+)
+def test_tt_hidden(text, converted):
+    assert markdownify([text], visible=False)[0] == converted
 
 
 @pytest.mark.parametrize(

@@ -186,6 +186,11 @@ h4 {
   z-index: -1;
 }
 
+#visual {
+  display: none;
+  margin: 3%;
+}
+
 #modal {
   font-family: "monoid";
   font-size: 10pt;

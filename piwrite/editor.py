@@ -41,11 +41,12 @@ class Editor:
         self.previous_file = None
         self.saved = False
         self.modal = ""
+        self.visual = ""
         self.status = None
         self.completions = None
         self.completions_markdownified = None
         self.font = "serif"
-        self.fontsize = 50
+        self.fontsize = 14
         self.err = None
         home = Path.home()
         self.docs = home / "piwrite-docs/"
@@ -175,7 +176,10 @@ class Editor:
             return
 
         if key == Keys.ControlP:
-            p_suggestions = proselint_tools.lint(str(self.buffer.lines[self.cursor.line]), config=proselint_config.default)
+            p_suggestions = proselint_tools.lint(
+                str(self.buffer.lines[self.cursor.line]),
+                config=proselint_config.default,
+            )
             suggestions = [f"At {sug[3]}: {sug[1]}" for sug in p_suggestions]
             self.modal = "<br>".join(suggestions)
             return
@@ -192,6 +196,12 @@ class Editor:
         if key == Keys.Escape and self.modal != "":
             logger.info("Hiding modal")
             self.modal = ""
+            self.clear_command()
+            return
+
+        if key == Keys.Escape and self.visual != "":
+            logger.info("Hiding visual")
+            self.visual = ""
             self.clear_command()
             return
 

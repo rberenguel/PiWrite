@@ -23,7 +23,8 @@ function piwrite(){
     if(!e.data || e.data == ""){
       return
     }
-    document.getElementById("field").style.fontSize = e.data + "px"
+    document.getElementById("field").style.fontSize = e.data + "pt"
+    document.getElementById("visual").style.fontSize = e.data + "pt"
   })
 
   socket.on('dot', function (e) {
@@ -33,44 +34,48 @@ function piwrite(){
       return
     }
     if(e.data == "nope"){
-      document.getElementById("field").style.display = "block"
+      document.getElementById("wrapper").style.display = "block"
       document.getElementById("graph").style.display = "none"
       document.getElementById("graph").src = ""
     } else {
-      document.getElementById("field").style.display = "none"
+      document.getElementById("wrapper").style.display = "none"
       document.getElementById("graph").src = e.data
       document.getElementById("graph").style.display = "block"
     }
   })
 
+  function addStyle(elem, stylename){
+    styles = ["monospace", "serif", "sans", "latex"]
+    for(let style of styles){
+      if(style==stylename){
+        elem.classList.add(stylename)
+      }else{
+        elem.classList.remove(style)
+      }
+    }
+  }
 
   socket.on('font', function (e) {
     if(!e.data || e.data == ""){
       return
     }
+    field = document.getElementById("field")
+    visual = document.getElementById("visual")
     if(e.data == "mono"){
-      document.getElementById("field").classList.add("monospace")
-      document.getElementById("field").classList.remove("serif")
-      document.getElementById("field").classList.remove("sans")
-      document.getElementById("field").classList.remove("latex")
+      addStyle(field, "monospace")
+      addStyle(visual, "monospace")
     }
     if(e.data == "serif"){
-      document.getElementById("field").classList.add("serif")
-      document.getElementById("field").classList.remove("monospace")
-      document.getElementById("field").classList.remove("sans")
-      document.getElementById("field").classList.remove("latex")
+      addStyle(field, "serif")
+      addStyle(visual, "serif")
     }
     if(e.data == "sans"){
-      document.getElementById("field").classList.add("sans")
-      document.getElementById("field").classList.remove("monospace")
-      document.getElementById("field").classList.remove("serif")
-      document.getElementById("field").classList.remove("latex")
+      addStyle(field, "sans")
+      addStyle(visual, "sans")
     }
     if(e.data == "latex"){
-      document.getElementById("field").classList.add("latex")
-      document.getElementById("field").classList.remove("monospace")
-      document.getElementById("field").classList.remove("serif")
-      document.getElementById("field").classList.remove("sans")
+      addStyle(field, "latex")
+      addStyle(visual, "latex")
     }
   });
 
@@ -97,6 +102,20 @@ function piwrite(){
       rotated = true
     }
   });
+ 
+  socket.on('visual', function (e) {
+    console.log("Receiving visual:")
+    if(e.data == ""){
+      document.getElementById("visual").style.display = "none"
+      document.getElementById("wrapper").style.display = "block"
+      document.getElementById("visual").innerHTML = ""
+    } else {
+      document.getElementById("visual").style.display = "block"
+      document.getElementById("wrapper").style.display = "none"
+      document.getElementById("visual").innerHTML = e.data.join("")
+    }
+  });
+
 
   socket.on('modal', function (e) {
     console.log("Receiving modal:")

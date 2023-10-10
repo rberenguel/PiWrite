@@ -29,16 +29,20 @@ It partially supports a reduced subset of Markdown, so you can:
 
 ### Commands that work regardless of the mode
 
-`Ctrl-a`: move the cursor to the beginning of the line
-`Ctrl-e`: move the cursor to the end of the line
+`Ctrl-a`: move the cursor to the beginning of the paragraph/line
+`Ctrl-e`: move the cursor to the end of the paragraph/line
+`Ctrl-p`: run `proselint` in the current paragraph/line. It is a bit slow
 `Arrows`: move the cursor around
 
 ### Commands in Normal mode
 
-`:h<enter>`: this help
-`:e filename<enter>`: open file (in the `piwrite-docs` folder only). Won't work if you have unsaved changes
-`:e! filename<enter>`: open file (in the `piwrite-docs` folder only). Will work regardless of your save state
-`:w filename<enter>`: write file (in the `piwrite-docs` folder only)
+`gg`: Go to the beginning of the file
+`G`: Go to the end of the file
+
+`:h<enter>`: This help
+`:e filename<enter>`: Open file (in the `piwrite-docs` folder only). Won't work if you have unsaved changes
+`:e! filename<enter>`: Open file (in the `piwrite-docs` folder only). Will work regardless of your save state
+`:w filename<enter>`: Write file (in the `piwrite-docs` folder only)
 
 `u`: Undo. The default (and so far only) undo depth is 10
 `Ctrl-r`: Redo. Same depth as above
@@ -50,11 +54,17 @@ It partially supports a reduced subset of Markdown, so you can:
 `:serif`: Switch to a serif font (default, IM Fell English)
 `:latex`: Switch to Computer Modern (the typical LaTeX font)
 
-`:q<enter>`: Quit, will try to shutdown. Won't work if you have unsaved changes
-`:q!<enter>`: Quit, will try to shutdown. Will work regardless of your save state
+`:stats`: Get word/paragraph, Flesch-Kincaid readability and Flesch ease
+`:lint`: Run `proselint` on the whole document. It is a bit slow to do so
+`:dot`: Experimental: use a Graphviz header template in `dot_template.dot` and render this file. Press `q` to go back to the file
+`v`: turn on "reading mode" for the current document
+
+`:q<enter>`: Quit, will try to shutdown the machine. Won't work if you have unsaved changes
+`:q!<enter>`: Quit, will try to shutdown th machine. Will work regardless of your save state
+
+`:keys`: Insert the pressed keys in the buffer. Useful to debug
 
 `dd`: delete the whole line
-
 `daw`: delete _around_ word (will slightly alter spaces)
 `diw`: delete _inside_ word (preserves spaces)
 `caw`: change _around_ word (like daw but switches to insert mode)

@@ -20,36 +20,51 @@ STARTS = {
 }
 
 
-def bolding(line):
-    beg_of_word = re.compile(r"(^|\s)(\*\*\S)")
-    end_of_word = re.compile(r"(\S\*\*)($|\s|:|\.)")
-    new_line = re.sub(beg_of_word, "\\1<b>\\2", line)
-    new_line = re.sub(end_of_word, "\\1</b>\\2", new_line)
+def bolding(line, visible=True):
+    beg_of_word = re.compile(r"(^|\s)\*\*(\S)")
+    end_of_word = re.compile(r"(\S)\*\*($|\s|:|\.)")
+    if visible:
+        mark = "**"
+    else:
+        mark = ""
+    new_line = re.sub(beg_of_word, f"\\1<b>{mark}\\2", line)
+    new_line = re.sub(end_of_word, f"\\1{mark}</b>\\2", new_line)
     return new_line
 
 
-def highlighting(line):
-    # TODO: needs tests
-    beg_of_word = re.compile(r"(^|\s)(::\S)")
-    end_of_word = re.compile(r"(\S::)($|\s)")
-    new_line = re.sub(beg_of_word, "\\1<span class='highlight'>\\2", line)
-    new_line = re.sub(end_of_word, "\\1</span>\\2", new_line)
+def highlighting(line, visible=True):
+    beg_of_word = re.compile(r"(^|\s)::(\S)")
+    end_of_word = re.compile(r"(\S)::($|\s)")
+    if visible:
+        mark = "::"
+    else:
+        mark = ""
+    new_line = re.sub(beg_of_word, f"\\1<span class='highlight'>{mark}\\2", line)
+    new_line = re.sub(end_of_word, f"\\1{mark}</span>\\2", new_line)
     return new_line
 
 
-def italicising(line):
-    beg_of_word = re.compile(r"(^|\s)(_\S)")
-    end_of_word = re.compile(r"(\S_)($|\s|:|\.)")
-    new_line = re.sub(beg_of_word, "\\1<i>\\2", line)
-    new_line = re.sub(end_of_word, "\\1</i>\\2", new_line)
+def italicising(line, visible=True):
+    beg_of_word = re.compile(r"(^|\s)_(\S)")
+    end_of_word = re.compile(r"(\S)_($|\s|:|\.)")
+    if visible:
+        mark = "_"
+    else:
+        mark = ""
+    new_line = re.sub(beg_of_word, f"\\1<i>{mark}\\2", line)
+    new_line = re.sub(end_of_word, f"\\1{mark}</i>\\2", new_line)
     return new_line
 
 
-def teletyping(line):
-    beg_of_word = re.compile(r"(^|\s)(`\S)")
-    end_of_word = re.compile(r"(\S`)($|\s|:|\.)")
-    new_line = re.sub(beg_of_word, "\\1<tt>\\2", line)
-    new_line = re.sub(end_of_word, "\\1</tt>\\2", new_line)
+def teletyping(line, visible=True):
+    beg_of_word = re.compile(r"(^|\s)`(\S)")
+    end_of_word = re.compile(r"(\S)`($|\s|:|\.)")
+    if visible:
+        mark = "`"
+    else:
+        mark = ""
+    new_line = re.sub(beg_of_word, f"\\1<tt>{mark}\\2", line)
+    new_line = re.sub(end_of_word, f"\\1{mark}</tt>\\2", new_line)
     return new_line
 
 
@@ -59,7 +74,7 @@ def focus(line, idx, current):
     return line
 
 
-def markdownify(original_lines, current_line=-1):
+def markdownify(original_lines, current_line=-1, visible=True):
     """Convert simple Markdown to reasonable HTML (with some visible Markdown markers), with highlighting of the current line"""
     new_lines = []
     skip = False
@@ -74,10 +89,10 @@ def markdownify(original_lines, current_line=-1):
             )
             continue
 
-        newline = bolding(newline)
-        newline = italicising(newline)
-        newline = teletyping(newline)
-        newline = highlighting(newline)
+        newline = bolding(newline, visible)
+        newline = italicising(newline, visible)
+        newline = teletyping(newline, visible)
+        newline = highlighting(newline, visible)
         for key, transform in STARTS.items():
             if line.startswith(key):
                 skip = True

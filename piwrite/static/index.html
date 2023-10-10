@@ -1,23 +1,26 @@
 <head>
-<link rel='stylesheet' href='/static/index.css'>
-<title>PiWrite</title>
-<script src="/static/30socketio.js"></script>
-<script src="/static/index.js"></script>
+  <link rel='stylesheet' href='/static/index.css'>
+  <title>PiWrite</title>
+  <script src="/static/30socketio.js"></script>
+  <script src="/static/index.js"></script>
 </head>
 <body onload="piwrite()">
-<div id="container">
-<div id="filename">(filename)</div>
-<div id="saved"></div>
-<div id="mode">?</div>
-</div>
-<div style="clear: both;"></div>
-<div id="fieldcontainer" style="font-size: 50px;">
-<pre id="field" class="serif">Press any key to trigger server update, and press <tt>:h(return)</tt> to get help</pre>
-<div id="modal"></div>
-<img id="graph" src=""/>
-</div>
-<div id="bottom">
-<div id="completions">&nbsp;</div>
-<div id="status">&nbsp;</div>
-</div>
+  <div id="visual"></div>
+  <div id="wrapper">
+    <div id="container">
+      <div id="filename">(filename)</div>
+      <div id="saved"></div>
+      <div id="mode">?</div>
+      <div style="clear: both;"></div>
+    </div>
+    <div id="fieldcontainer" style="font-size: 14pt;">
+      <pre id="field" class="serif">Press any key to trigger server update, and press <tt>:h(return)</tt> to get help</pre>
+      <div id="modal"></div>
+      <img id="graph" src=""/>
+    </div>
+    <div id="bottom">
+      <div id="completions">&nbsp;</div>
+      <div id="status">&nbsp;</div>
+    </div>
+  </div>
 </body>

@@ -10,6 +10,9 @@ from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
 from readability import Readability
 
+from proselint import config as proselint_config
+from proselint import tools as proselint_tools
+
 from piwrite.buffer import Buffer
 from piwrite.cursor import Cursor
 from piwrite.line import Line
@@ -38,6 +41,10 @@ class Dispatcher:
         if command[-1] == Keys.Escape:
             # TODO: this has no test
             self.editor.clear_command()
+            return
+        if command == ["v"]:
+            lines = [str(lin) for lin in self.editor.buffer.get()]
+            self.editor.visual = markdownify(lines, visible=False)
             return
         if command[-1] == Keys.ControlH:
             self.editor._command = self.editor._command[0:-2]
@@ -111,6 +118,19 @@ class Dispatcher:
                 self.editor._history_pointer
             ].copy()
             self.editor.buffer.clip(self.editor.cursor)
+            return
+
+        if command == ["g"]:
+            return
+
+        if command == ["g", "g"]:
+            self.editor.clear_command()
+            self.editor.cursor.to(0, 0)
+            return
+
+        if command == ["G"]:
+            self.editor.clear_command()
+            self.editor.cursor.to(len(self.editor.buffer.lines) - 1, 0)
             return
 
         if command == ["p"]:
@@ -188,26 +208,57 @@ class Dispatcher:
             self.editor.log_keys = True
             self.editor.status = "Logging keys to buffer"
             return
-        if command == [":", "r", "e", "a", "d", Keys.ControlM]:
+        if command == [":", "s", "t", "a", "t", "s", Keys.ControlM]:
             self.editor.clear_command()
-            content = "".join([str(lin) for lin in self.editor.buffer.get()])
+            content = " ".join([str(lin) for lin in self.editor.buffer.get()])
             content = (
                 content.replace("*", " ")
                 .replace("_", " ")
                 .replace("#", " ")
                 .replace(":", " ")
             )
+            words = len(content.split(" "))
+            pars = len(
+                [1 for lin in self.editor.buffer.get() if len(str(lin).strip()) > 0]
+            )
             r = Readability(content)
             try:
                 fc = r.flesch_kincaid()
                 f = r.flesch()
+                w_line = f"<b>Stats and readability</b><br/>&nbsp; word count: {words}<br/>&nbsp; paragraphs: {pars}"
                 fc_line = f"<b>Flesch-Kincaid</b><br/>&nbsp; score: {fc.score:.2f}<br/>&nbsp; grade: {fc.grade_level} (1-18)"
                 f_line = f"<b>Flesch ease</b><br/>&nbsp; ease: {f.ease} ({f.score:.2f})"
-                modal = "<br/>".join([fc_line, f_line])
+                modal = "<br/>".join([w_line, fc_line, f_line])
                 self.editor.modal = modal
             except Exception as e:
                 self.editor.status = f"Readability failure: {e}"
             return
+
+        if command == [":", "l", "i", "n", "t", Keys.ControlM]:
+            self.editor.clear_command()
+            _, tmpname = tempfile.mkstemp()
+            resolved = Path(tmpname).resolve()
+            previous_file = self.editor.filename
+            previous_save_status = self.editor.saved
+            cmd = [":W ", str(resolved), Keys.ControlM]
+            self.editor.send(cmd)
+            text = resolved.read_text()
+            text = (
+                text.replace("*", " ")
+                .replace("_", " ")
+                .replace("#", " ")
+                .replace(":", " ")
+            )
+            p_suggestions = proselint_tools.lint(text, config=proselint_config.default)
+            suggestions = [f"At {sug[2]}:{sug[3]}: {sug[1]}" for sug in p_suggestions]
+            if len(suggestions) == 0:
+                self.editor.modal = "No suggestions: As good as <i>The Great Gatsby</i>"
+            else:
+                self.editor.modal = "<br>".join(suggestions)
+            self.editor.filename = previous_file
+            self.editor.saved = previous_save_status
+            return
+
         if command == [":", "q", Keys.ControlM]:
             self.editor.clear_command()
             if self.editor.saved:
@@ -253,7 +304,7 @@ class Dispatcher:
                 str((self.editor.docs / Path("imgs") / Path("graph")).resolve())
                 + ".png"
             )
-            template = (self.editor.docs / Path("dot_template")).read_text()
+            template = (self.editor.docs / Path("dot_template.dot")).read_text()
             content = resolved.read_text()
             adapted = resolved.with_suffix(".dot")
             with adapted.open("a") as f:
@@ -351,7 +402,9 @@ class Dispatcher:
                         md.append(f"::{completion}::")
                     else:
                         md.append(completion)
-                self.editor.completions_markdownified = markdownify([" ".join(md)])
+                self.editor.completions_markdownified = markdownify(
+                    [" ".join(md)], visible=False
+                )
             return
         if command[0:4] == [":", "v", "i", "z"] and command[-1] == Keys.ControlM:
             try:

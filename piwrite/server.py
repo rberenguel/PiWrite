@@ -19,12 +19,18 @@ logger = logging.getLogger("piwrite")
 
 from piwrite.editor import Editor
 
+import nltk
+
 try:
-    # This means you need to run it at least once without access point mode
-    import nltk
-    nltk.download('punkt')
-except:
-    pass
+    nltk.data.find("tokenizers/punkt")
+except LookupError:
+    print("Punkt not available")
+    try:
+        # This means you need to run it at least
+        # once without access point mode
+        nltk.download("punkt")
+    except:
+        pass
 
 HOST = os.getenv("PIWRITE_HOST", "127.0.0.1")
 DEBUG = os.getenv("PIWRITE_DEBUG", "False") == "True"
@@ -65,6 +71,7 @@ v = Editor()
 
 sio = socketio.AsyncServer(logger=False, engineio_logger=False, async_mode="aiohttp")
 
+
 def init_map():
     update_only_map = {
         "saved": {"sent": False, "old": None, "exec": lambda: v.saved},
@@ -78,6 +85,7 @@ def init_map():
         "filename": {"sent": False, "old": None, "exec": lambda: v.filename},
         "command": {"sent": False, "old": None, "exec": lambda: v.command()},
         "modal": {"sent": False, "old": None, "exec": lambda: v.modal},
+        "visual": {"sent": False, "old": None, "exec": lambda: v.visual},
         "status": {"sent": False, "old": None, "exec": lambda: v.status},
         "font": {"sent": False, "old": None, "exec": lambda: v.font},
         "fontsize": {"sent": False, "old": None, "exec": lambda: v.fontsize},
