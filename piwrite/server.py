@@ -159,7 +159,7 @@ def start():
     configure_logger()
     if DEBUG:
         logger.setLevel(logging.DEBUG)
-    else if INFO:
+    elif INFO:
         logger.setLevel(logging.INFO)
     else:
         logger.setLevel(logging.ERROR)
