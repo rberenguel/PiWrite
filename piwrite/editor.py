@@ -3,6 +3,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from collections import OrderedDict
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -31,7 +32,7 @@ class Editor:
         self._mode = Mode.NORMAL
         self._command = []
         self.yank = [""]
-        self.updating_fields = set()
+        self.updating_fields = OrderedDict()
         self.viz = None
         self.setup_movement()
         self.rot = "0"
@@ -182,7 +183,7 @@ class Editor:
             )
             suggestions = [f"At {sug[3]}: {sug[1]}" for sug in p_suggestions]
             self.modal = "<br>".join(suggestions)
-            self.updating_fields.add("modal")
+            self.updating_fields["modal"] = True
             return
 
         if key in self.GENERIC_MOVEMENT:
@@ -197,21 +198,21 @@ class Editor:
         if key == Keys.Escape and self.modal != "":
             logger.info("Hiding modal")
             self.modal = ""
-            self.updating_fields.add("modal")
+            self.updating_fields["modal"] = True
             self.clear_command()
             return
 
         if key == "q" and self.visual != "":
             logger.info("Hiding visual")
             self.visual = ""
-            self.updating_fields.add("visual")
+            self.updating_fields["visual"] = True
             self.clear_command()
             return
 
         if self._mode == Mode.INSERT:
             if key == Keys.Escape:
                 self._mode = Mode.NORMAL
-                self.updating_fields.add("mode")
+                self.updating_fields["mode"] = True
                 self.cursor -= 1  # This seems to be the vim behaviour
                 self.buffer.clip(self.cursor)
                 logger.debug(
@@ -234,7 +235,7 @@ class Editor:
                 )
                 return
             if self.saved:
-                self.updating_fields.add("saved")
+                self.updating_fields["saved"] = True
             self.saved = False
             if key == Keys.Delete or key == Keys.ControlH:
                 self.buffer.delete(self.cursor)
@@ -243,18 +244,18 @@ class Editor:
 
         if self._mode == Mode.NORMAL:
             self._command.append(key)
-            self.updating_fields.add("command")
+            self.updating_fields["command"] = True
             self.dispatch_command(self._command)
         return
 
     def clear_command(self):
         self.completions = None
         self.completions_markdownified = None
-        self.updating_fields.add("completions")
+        self.updating_fields["completions"] = True
         self.status = "&nbsp;"
-        self.updating_fields.add("status")
+        self.updating_fields["status"] = True
         self._command = []
-        self.updating_fields.add("command")
+        self.updating_fields["command"] = True
 
     def command(self):
         filt = [str(l) for l in self._command if len(str(l)) == 1]
