@@ -105,6 +105,7 @@ class Dispatcher:
             if self.editor._history_pointer < 0:
                 logger.info("No further undo")
                 self.editor.status = "No further undo information"
+                self.editor.updating_fields["status"] = True
                 self.editor._history_pointer = 0
             logger.debug("Undoing at %s", self.editor._history_pointer)
             self.editor.buffer = self.editor._history[
@@ -112,6 +113,12 @@ class Dispatcher:
             ].copy()
             logger.debug("Buffer now: %s", self.editor.buffer)
             self.editor.buffer.clip(self.editor.cursor)
+            return
+        if command == [Keys.ControlS]:
+            self.editor.clear_command()
+            words, pars, _ = self.editor.buffer.counts()
+            self.editor.status = f"{words} words, {pars} paragraphs"
+            self.editor.updating_fields["status"] = True
             return
 
         if command == [Keys.ControlR]:
@@ -222,17 +229,7 @@ class Dispatcher:
             return
         if command == [":", "s", "t", "a", "t", "s", Keys.ControlM]:
             self.editor.clear_command()
-            content = " ".join([str(lin) for lin in self.editor.buffer.get()])
-            content = (
-                content.replace("*", " ")
-                .replace("_", " ")
-                .replace("#", " ")
-                .replace(":", " ")
-            )
-            words = len(content.split(" "))
-            pars = len(
-                [1 for lin in self.editor.buffer.get() if len(str(lin).strip()) > 0]
-            )
+            words, pars, content = self.editor.buffer.counts()
             r = Readability(content)
             fc_line = ""
             f_line = ""

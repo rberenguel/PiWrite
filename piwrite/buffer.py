@@ -30,6 +30,21 @@ class Buffer:
         joined = "|".join([str(l) for l in self.lines])
         return f"Buffer({joined})"
 
+    def counts(self):
+        content = " ".join([str(lin) for lin in self.get()])
+        content = (
+            content.replace("*", " ")
+            .replace("_", " ")
+            .replace("#", " ")
+            .replace(":", " ")
+        )
+        words = len(content.split(" "))
+        pars = len(
+            [1 for lin in self.get() if len(str(lin).strip()) > 0]
+        )
+        return words, pars, content
+
+
     def insert(self, key, cursor: Cursor):
         col: int = cursor.column
 
