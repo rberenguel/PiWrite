@@ -1,5 +1,6 @@
 import asyncio
 import importlib
+import itertools
 import logging
 import os
 
@@ -96,7 +97,7 @@ async def the_loop():
 
     def keys_ready():
         nonlocal key_press
-        for _key_press in inp.read_keys():
+        for _key_press in itertools.chain(inp.read_keys(),   inp.flush_keys()):
             key.set()
             key_press = _key_press
             if key_press.key == Keys.ControlC:
