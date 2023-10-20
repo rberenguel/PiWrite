@@ -7,10 +7,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from prompt_toolkit.keys import Keys
-from readability import Readability
-
 from proselint import config as proselint_config
 from proselint import tools as proselint_tools
+from readability import Readability
 
 from piwrite.buffer import Buffer
 from piwrite.cursor import Cursor

@@ -97,11 +97,9 @@ async def the_loop():
 
     def keys_ready():
         nonlocal key_press
-        for _key_press in itertools.chain(inp.read_keys(),   inp.flush_keys()):
+        for _key_press in itertools.chain(inp.read_keys(), inp.flush_keys()):
             key.set()
             key_press = _key_press
-            if key_press.key == Keys.ControlC:
-                done.set()
 
     with inp.raw_mode():
         with inp.attach(keys_ready):

@@ -34,13 +34,14 @@ class Editor:
         self.yank = [""]
         self.updating_fields = OrderedDict()
         self.viz = None
+        self._break_counter = 0
         self.setup_movement()
         self.rot = "0"
         self.dot = "nope"
         self.log_keys = False
         self.filename = "unnamed"
         self.previous_file = None
-        self.saved = False
+        self.saved = True  # Should start in saved state
         self.modal = ""
         self.visual = ""
         self.status = None
@@ -167,7 +168,11 @@ class Editor:
             return
         key = _key.key
         if key == Keys.ControlC:
-            sys.exit(0)
+            self._break_counter += 1
+            if self._break_counter == 3:
+                sys.exit(0)
+        else:
+            self._break_counter = 0
         if key == Keys.Escape and self.log_keys:
             self.log_keys = False
             return

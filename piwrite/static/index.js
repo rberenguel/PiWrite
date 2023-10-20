@@ -172,8 +172,8 @@ function piwrite(){
     } else {
       curr = document.getElementById("field").getBoundingClientRect().top 
       adjusted = curr-clientRect.top
-      if(Math.abs(clientRect.top)>100){
-        adjusted+=100
+      if(Math.abs(clientRect.top)>400){
+        adjusted+=400
       }
     }
     document.getElementById("field").style.top = adjusted+"px"
