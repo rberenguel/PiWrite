@@ -22,7 +22,7 @@ STARTS = {
 
 def bolding(line, visible=True):
     beg_of_word = re.compile(r"(^|\s)\*\*(\S)")
-    end_of_word = re.compile(r"(\S)\*\*($|\s|:|\.)")
+    end_of_word = re.compile(r"(\S)\*\*($|\s|:|\.|\W)")
     if visible:
         mark = "**"
     else:
@@ -34,7 +34,7 @@ def bolding(line, visible=True):
 
 def highlighting(line, visible=True):
     beg_of_word = re.compile(r"(^|\s)::(\S)")
-    end_of_word = re.compile(r"(\S)::($|\s)")
+    end_of_word = re.compile(r"(\S)::($|\s|\W)")
     if visible:
         mark = "::"
     else:
@@ -46,7 +46,7 @@ def highlighting(line, visible=True):
 
 def italicising(line, visible=True):
     beg_of_word = re.compile(r"(^|\s)_(\S)")
-    end_of_word = re.compile(r"(\S)_($|\s|:|\.)")
+    end_of_word = re.compile(r"(\S)_($|\s|:|\.|\W)")
     if visible:
         mark = "_"
     else:
@@ -58,7 +58,7 @@ def italicising(line, visible=True):
 
 def teletyping(line, visible=True):
     beg_of_word = re.compile(r"(^|\s)`(\S)")
-    end_of_word = re.compile(r"(\S)`($|\s|:|\.)")
+    end_of_word = re.compile(r"(\S)`($|\s|:|\.|\W)")
     if visible:
         mark = "`"
     else:

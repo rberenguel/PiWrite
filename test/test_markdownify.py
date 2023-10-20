@@ -21,6 +21,9 @@ def test_headers(text, converted):
     [
         ("**foo**", "<b>**foo**</b><br/>"),
         ("**foo**.", "<b>**foo**</b>.<br/>"),
+        ("**foo**?", "<b>**foo**</b>?<br/>"),
+        ('**foo**"', '<b>**foo**</b>"<br/>'),
+        ("**foo**'", "<b>**foo**</b>'<br/>"),
         ("**foo**. aaa", "<b>**foo**</b>. aaa<br/>"),
         (" **foo**", " <b>**foo**</b><br/>"),
         (" **foo** ", " <b>**foo**</b> <br/>"),
@@ -38,6 +41,9 @@ def test_bold(text, converted):
     [
         ("**foo**", "<b>foo</b><br/>"),
         ("**foo**.", "<b>foo</b>.<br/>"),
+        ('**foo**"', '<b>foo</b>"<br/>'),
+        ("**foo**'", "<b>foo</b>'<br/>"),
+        ("**foo**?", "<b>foo</b>?<br/>"),
         ("**foo**. aaa", "<b>foo</b>. aaa<br/>"),
         (" **foo**", " <b>foo</b><br/>"),
         (" **foo** ", " <b>foo</b> <br/>"),
@@ -55,6 +61,9 @@ def test_bold_hidden(text, converted):
     [
         ("_foo_", "<i>_foo_</i><br/>"),
         ("_foo_.", "<i>_foo_</i>.<br/>"),
+        ("_foo_?", "<i>_foo_</i>?<br/>"),
+        ('_foo_"', '<i>_foo_</i>"<br/>'),
+        ("_foo_'", "<i>_foo_</i>'<br/>"),
         ("_foo_. aaa", "<i>_foo_</i>. aaa<br/>"),
         (" _foo_", " <i>_foo_</i><br/>"),
         (" _foo_ ", " <i>_foo_</i> <br/>"),

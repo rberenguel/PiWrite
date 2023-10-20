@@ -278,7 +278,7 @@ class Dispatcher:
         if command == [":", "q", Keys.ControlM]:
             self.editor.clear_command()
             if self.editor.saved:
-                self.editor.status = "Shutting down" # This will never show, blocking
+                self.editor.status = "Shutting down"  # This will never show, blocking
                 time.sleep(1)  # I want this real blocking here
                 subprocess.call(["shutdown", "-h", "now"])
             else:

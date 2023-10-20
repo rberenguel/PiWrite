@@ -39,11 +39,8 @@ class Buffer:
             .replace(":", " ")
         )
         words = len(content.split(" "))
-        pars = len(
-            [1 for lin in self.get() if len(str(lin).strip()) > 0]
-        )
+        pars = len([1 for lin in self.get() if len(str(lin).strip()) > 0])
         return words, pars, content
-
 
     def insert(self, key, cursor: Cursor):
         col: int = cursor.column
