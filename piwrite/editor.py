@@ -55,6 +55,15 @@ class Editor:
         self.docs.mkdir(exist_ok=True)
         (self.docs / Path("imgs")).mkdir(exist_ok=True)
         self.dispatcher = Dispatcher(editor=self)
+        config = self.docs / "config"
+        if config.exists():
+            lines = config.read_text()
+            for line in lines.split("\n"):
+                logger.debug("Sending config line %s", line)
+                self.send([line, Keys.ControlM])
+            self.status = "Config loaded"
+            self.updating_fields["status"] = True
+
 
     def send(self, arr):
         """Send an array containing strings and keys to be parsed"""
@@ -130,7 +139,6 @@ class Editor:
             return markdownify(lines, row)
         else:
             return markdownify(lines[row - shift :], shift)
-
     def setup_movement(self):
         def up():
             self.cursor ^= -1

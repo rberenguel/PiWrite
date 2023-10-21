@@ -385,6 +385,11 @@ class Dispatcher:
             self.editor.font = "mono"
             self.editor.updating_fields["font"] = True
             return
+        if "".join(command[0:5]) == ":gyre" and command[-1] == Keys.ControlM:
+            self.editor.clear_command()
+            self.editor.font = "gyre"
+            self.editor.updating_fields["font"] = True
+            return
         if "".join(command[0:5]) == ":sans" and command[-1] == Keys.ControlM:
             self.editor.clear_command()
             self.editor.font = "sans"
@@ -401,18 +406,28 @@ class Dispatcher:
             self.editor.updating_fields["font"] = True
             return
         if "".join(command[0:9]) == ":fontsize" and command[-1] == Keys.ControlM:
-            self.editor.fontsize = int("".join(command[10:-1]).strip())
+            fs = command[10:-1]
             self.editor.clear_command()
-            self.editor.status = f"Set font size to {self.editor.fontsize}"
-            self.editor.updating_fields["fontsize"] = True
-            self.editor.updating_fields["status"] = True
+            try:
+                self.editor.fontsize = int("".join(fs).strip())
+                self.editor.updating_fields["fontsize"] = True
+                self.editor.status = f"Set font size to {self.editor.fontsize}"
+                self.editor.updating_fields["status"] = True
+            except Exception as e:
+                self.editor.err = str(e)
+                self.editor.updating_fields["err"] = True
             return
         if "".join(command[0:3]) == ":fs" and command[-1] == Keys.ControlM:
-            self.editor.fontsize = int("".join(command[4:-1]).strip())
+            fs = command[4:-1]
             self.editor.clear_command()
-            self.editor.status = f"Set font size to {self.editor.fontsize}"
-            self.editor.updating_fields["fontsize"] = True
-            self.editor.updating_fields["status"] = True
+            try:
+                self.editor.fontsize = int("".join(fs).strip())
+                self.editor.updating_fields["fontsize"] = True
+                self.editor.status = f"Set font size to {self.editor.fontsize}"
+                self.editor.updating_fields["status"] = True
+            except Exception as e:
+                self.editor.err = str(e)
+                self.editor.updating_fields["err"] = True
             return
         if (command[0:2] == [":", "e"] or command[0:3] == [":", "e", "!"]) and command[
             -1

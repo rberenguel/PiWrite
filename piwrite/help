@@ -53,12 +53,19 @@ It partially supports a reduced subset of Markdown, so you can:
 `:sans`: Switch to a sans-serif font (Cooper Hewitt book)
 `:serif`: Switch to a serif font (default, IM Fell English)
 `:latex`: Switch to Computer Modern (the typical LaTeX font)
+`:gyre`: Switch to TeX Gyre Heros (a font similar to Helvetica)
 
-`:stats`: Get word/paragraph, Flesch-Kincaid readability and Flesch ease
+`:fontsize N`: Change font size to `N` points
+`:fs N`: Shorthand for the above
+
+`:stats`: Get word/paragraph counts, Flesch-Kincaid readability and Flesch ease
+`Ctrl-s`: Get word/paragraph counts in the status line
 `:lint`: Run `proselint` on the whole document. It is a bit slow to do so
-`:dot`: Experimental: use a Graphviz header template in `dot_template.dot` and render this file. Press `q` to go back to the file
+`:dot`: _Experimental_: use a Graphviz header template in `dot_template.dot` and render this file. Press `q` to go back to the file
 `v`: turn on "reading mode" for the current document
+`viz N:M`: More or less lines measure of lines in buffer (`M`) and shift (`N`)
 
+`Ctrl-q`: Send all internal fields to the frontend, to refresh the webpage (hopefully)
 `:q<enter>`: Quit, will try to shutdown the machine. Won't work if you have unsaved changes
 `:q!<enter>`: Quit, will try to shutdown th machine. Will work regardless of your save state
 
@@ -72,3 +79,10 @@ It partially supports a reduced subset of Markdown, so you can:
 
 `p`: paste the last deleted/copied text at the cursor position
 `P`: paste the last deleted/copied text before the cursor position
+
+---
+
+You can put commands in a file named `config`, it will be loaded on start if it exists. Useful to set the font and font size, like
+
+:latex
+:fs 14

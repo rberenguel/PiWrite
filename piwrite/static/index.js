@@ -9,7 +9,7 @@ function piwrite(){
     console.log('created connection')
   });
 
-  socket.on('error', function (e) {
+  socket.on('err', function (e) {
     if(!e.data || e.data == ""){
       return
     }
@@ -28,8 +28,6 @@ function piwrite(){
   })
 
   socket.on('dot', function (e) {
-    console.log("Receiving dot:")
-    console.log(e)
     if(!e.data || e.data == ""){
       return
     }
@@ -49,7 +47,7 @@ function piwrite(){
   })
 
   function addStyle(elem, stylename){
-    styles = ["monospace", "serif", "sans", "latex"]
+    styles = ["monospace", "serif", "sans", "latex", "gyre"]
     for(i=0;i<styles.length;i++){
       // Missing let of here, blame the old browser in the Kindle
       style = styles[i]
@@ -83,7 +81,11 @@ function piwrite(){
       addStyle(field, "latex")
       addStyle(visual, "latex")
     }
-  });
+    if(e.data == "gyre"){
+      addStyle(field, "gyre")
+      addStyle(visual, "gyre")
+    }
+   });
 
   rotated = false
 
@@ -110,7 +112,6 @@ function piwrite(){
   });
 
   socket.on('visual', function (e) {  
-    console.log("Receiving visual")
     // Having to use height is one of those barfs of the Kindle browser
     if(!e.data || e.data.length == 0){
       document.getElementById("wrapper").style.height = "auto"
@@ -128,8 +129,6 @@ function piwrite(){
   }); 
 
   socket.on('modal', function (e) {
-    console.log("Receiving modal:")
-    console.log(e)
     if(e.data == ""){
       document.getElementById("modal").style.display = "none"
       document.getElementById("modal").innerHTML = ""

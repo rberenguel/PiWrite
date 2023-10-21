@@ -76,6 +76,28 @@
   font-style: italic;
 }
 
+@font-face {
+  font-family: "TeX Gyre Heros";
+  src: url("/static/texgyreheros-regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TeX Gyre Heros";
+  src: url("/static/texgyreheros-bold") format("opentype");
+  font-weight: 900;
+  font-style: bold;
+}
+
+@font-face {
+  font-family: "TeX Gyre Heros";
+  src: url("/static/texgyreheros-italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+
 body {
   font-family: "monoid";
   margin-right: 0%;
@@ -103,6 +125,11 @@ body {
 .latex {
   font-family: "Computer Modern";
 }
+
+.gyre {
+  font-family: "TeX Gyre Heros";
+}
+
 
 .serif {
   font-family: "IM Fell English", serif;
