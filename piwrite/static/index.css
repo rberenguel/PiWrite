@@ -85,7 +85,7 @@
 
 @font-face {
   font-family: "TeX Gyre Heros";
-  src: url("/static/texgyreheros-bold") format("opentype");
+  src: url("/static/texgyreheros-bold.otf") format("opentype");
   font-weight: 900;
   font-style: bold;
 }

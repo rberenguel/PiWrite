@@ -63,7 +63,8 @@ class Editor:
                 self.send([line, Keys.ControlM])
             self.status = "Config loaded"
             self.updating_fields["status"] = True
-
+        
+        subprocess.call(["python3", "/home/ruben/display.py", "-f", self.font, "-s", "on"])
 
     def send(self, arr):
         """Send an array containing strings and keys to be parsed"""
@@ -178,6 +179,7 @@ class Editor:
         if key == Keys.ControlC:
             self._break_counter += 1
             if self._break_counter == 3:
+                subprocess.call(["python3", "/home/ruben/display.py", "-f", self.font, "-s", "off"])
                 sys.exit(0)
         else:
             self._break_counter = 0
