@@ -277,7 +277,7 @@ class Dispatcher:
         if command == [":", "q", Keys.ControlM]:
             self.editor.clear_command()
             if self.editor.saved:
-                subprocess.call(["python3", "/home/ruben/display.py", "-f", self.font, "-s", "off"])
+                subprocess.call([self._display, "/home/ruben/display.py", "-f", self.font, "-s", "off"])
                 subprocess.call(["shutdown", "-h", "now"])
             else:
                 self.editor.status = "You have unsaved changes"

@@ -1,10 +1,16 @@
-#!/usr/bin/env python3
+#!/home/ruben/piwrite/bin/python3.11
+
+# For _reasons_ I need to use a separate virtual environment for this
 
 import argparse
 
 import inky
 from inky import InkyPHAT
 from PIL import Image, ImageDraw, ImageFont
+
+from pathlib import Path
+
+static = Path(__file__).parent / "static"
 
 inky_display = InkyPHAT("red")
 
@@ -30,18 +36,18 @@ draw = ImageDraw.Draw(img)
 
 # Load the fonts
 
-monoid = ImageFont.truetype("piwrite/static/monoid-bold.ttf", 40)
-monoid_small = ImageFont.truetype("piwrite/static/monoid-bold.ttf", 16)
-monoid_med = ImageFont.truetype("piwrite/static/monoid-bold.ttf", 24)
+monoid = ImageFont.truetype(str(static / "monoid-bold.ttf"), 40)
+monoid_small = ImageFont.truetype(str(static / "monoid-bold.ttf"), 16)
+monoid_med = ImageFont.truetype(str(static / "monoid-bold.ttf"), 24)
 piwrite = "PiWrite"
 
 font = monoid
 if args.font == "gyre":
-    font = ImageFont.truetype("piwrite/static/texgyreheros-bold.otf", 50)
+    font = ImageFont.truetype(str(static / "texgyreheros-bold.otf"), 50)
 if args.font == "latex":
-    font = ImageFont.truetype("piwrite/static/cmunbx.ttf", 50)
+    font = ImageFont.truetype(str(static / "cmunbx.ttf"), 50)
 if args.font == "serif":
-    font = ImageFont.truetype("piwrite/static/ImFell.ttf", 54)
+    font = ImageFont.truetype(str(static / "ImFell.ttf"), 54)
 
 power_color = inky_display.BLACK if args.state == "off" else inky_display.RED
 
