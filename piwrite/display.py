@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "--font",
     "-f",
-    choices=["mono", "latex", "gyre", "serif"],
+    choices=["mono", "latex", "gyre", "serif", "sans"],
     required=True,
     help="Font",
 )
