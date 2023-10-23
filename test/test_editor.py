@@ -151,6 +151,32 @@ def test_dd():
     assert v.buffer.get()[0] == "456"
 
 
+def test_ddollar():
+    v = editor.Editor()
+    cmd = ["i123", LEFT, LEFT, ESC, "d$i1"]
+    v.send(cmd)
+    assert v.buffer.get()[0] == "1"
+
+    v = editor.Editor()
+    cmd = ["i123", ENT, "456", Keys.Up, ESC, "d$"]
+    v.send(cmd)
+    assert v.buffer.get()[0] == "12"
+    assert v.buffer.get()[1] == "456"
+
+
+def test_cdollar():
+    v = editor.Editor()
+    cmd = ["i123", LEFT, LEFT, ESC, "c$1"]
+    v.send(cmd)
+    assert v.buffer.get()[0] == "1"
+
+    v = editor.Editor()
+    cmd = ["i123", ENT, "456", Keys.Up, ESC, "c$3"]
+    v.send(cmd)
+    assert v.buffer.get()[0] == "123"
+    assert v.buffer.get()[1] == "456"
+
+
 @pytest.mark.parametrize(
     "text,deleted,yanked",
     [

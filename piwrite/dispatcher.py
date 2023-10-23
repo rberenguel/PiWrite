@@ -199,7 +199,21 @@ class Dispatcher:
             self.editor.cursor.column = col
             self.editor.buffer.clip(self.editor.cursor)
             return
-
+        if command == ["d", "$"]:
+            self.editor.clear_command()
+            row = self.editor.cursor.line
+            col = self.editor.cursor.column
+            line = self.editor.buffer[row]
+            line.cursor = self.editor.cursor
+            cut = line[col:]
+            self.editor.buffer[row] = Line(line[:col])
+            self.editor.yank = [cut]
+            self.editor.buffer.clip(self.editor.cursor)
+            return
+        if command == ["c", "$"]:
+            self.editor.clear_command()
+            self.editor.send("d$a")
+            return
         if command[0] == "q" and self.editor.previous_file is not None:
             cmd = [":E ", self.editor.previous_file[0], Keys.ControlM]
             self.editor.clear_command()
@@ -277,7 +291,16 @@ class Dispatcher:
         if command == [":", "q", Keys.ControlM]:
             self.editor.clear_command()
             if self.editor.saved:
-                subprocess.call([self.editor._display, "/home/ruben/display.py", "-f", self.editor.font, "-s", "off"])
+                subprocess.call(
+                    [
+                        self.editor._display,
+                        "/home/ruben/display.py",
+                        "-f",
+                        self.editor.font,
+                        "-s",
+                        "off",
+                    ]
+                )
                 subprocess.call(["shutdown", "-h", "now"])
             else:
                 self.editor.status = "You have unsaved changes"

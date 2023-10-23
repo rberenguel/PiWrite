@@ -24,7 +24,7 @@ logger = logging.getLogger("piwrite")
 class Editor:
     UNDO_DEPTH = 10
 
-    def __init__(self):
+    def __init__(self, skip_config=True):
         # TODO: Some could be properties
         # TODO: Some should be saved and restored on quit
         self.refresh = False
@@ -56,16 +56,18 @@ class Editor:
         (self.docs / Path("imgs")).mkdir(exist_ok=True)
         self.dispatcher = Dispatcher(editor=self)
         config = self.docs / "config"
-        if config.exists():
+        if config.exists() and not skip_config:
             lines = config.read_text()
             for line in lines.split("\n"):
                 logger.debug("Sending config line %s", line)
                 self.send([line, Keys.ControlM])
             self.status = "Config loaded"
             self.updating_fields["status"] = True
-        
-        self._display = Path(__file__).parent / "display.py"
-        subprocess.call([self._display, "-f", self.font, "-s", "on"])
+        try:
+            self._display = Path(__file__).parent / "display.py"
+            subprocess.call([self._display, "-f", self.font, "-s", "on"])
+        except:
+            pass
 
     def send(self, arr):
         """Send an array containing strings and keys to be parsed"""
@@ -141,6 +143,7 @@ class Editor:
             return markdownify(lines, row)
         else:
             return markdownify(lines[row - shift :], shift)
+
     def setup_movement(self):
         def up():
             self.cursor ^= -1
@@ -180,7 +183,16 @@ class Editor:
         if key == Keys.ControlC:
             self._break_counter += 1
             if self._break_counter == 3:
-                subprocess.call([self._display, "/home/ruben/display.py", "-f", self.font, "-s", "off"])
+                subprocess.call(
+                    [
+                        self._display,
+                        "/home/ruben/display.py",
+                        "-f",
+                        self.font,
+                        "-s",
+                        "off",
+                    ]
+                )
                 sys.exit(0)
         else:
             self._break_counter = 0

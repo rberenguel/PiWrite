@@ -89,7 +89,6 @@ for y in range(upper - l_height, upper):
         img.putpixel((x, y), power_color)
 
 
-
 # I wasn't sure if it was working properly, so did this manually
 
 colors = [inky.WHITE, inky.BLACK, inky.RED]

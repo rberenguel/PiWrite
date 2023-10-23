@@ -58,7 +58,7 @@ def staticHandle(file):
     return handler
 
 
-v = None 
+v = None
 sio = socketio.AsyncServer(logger=False, engineio_logger=False, async_mode="aiohttp")
 
 
@@ -154,7 +154,7 @@ def start():
             nltk.download("punkt")
         except:
             pass
-    v = Editor()
+    v = Editor(skip_config=False)
     asyncio.run(main())
 
 

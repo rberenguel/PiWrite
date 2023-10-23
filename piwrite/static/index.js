@@ -169,10 +169,11 @@ function piwrite(){
     if(rotated){
       return
     } else {
+      adjusted = 0
       curr = document.getElementById("field").getBoundingClientRect().top 
       adjusted = curr-clientRect.top
-      if(Math.abs(clientRect.top)>400){
-        adjusted+=400
+      if(Math.abs(clientRect.top)>350){
+        adjusted+=350
       }
     }
     document.getElementById("field").style.top = adjusted+"px"
